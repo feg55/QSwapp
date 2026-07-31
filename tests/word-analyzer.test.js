@@ -298,6 +298,7 @@ test("preserves case style through the keyboard mapping", () => {
   assert.equal(correctText("Ghbdtn"), "Привет");
   assert.equal(correctText("GHBDTN"), "ПРИВЕТ");
   assert.equal(correctText("Игыштуыы"), "Business");
+  assert.equal(correctText("АШДУ"), "FILE");
   assert.equal(correctText("BUSINESS"), "BUSINESS");
   assert.equal(correctText("API"), "API");
 });

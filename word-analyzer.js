@@ -597,6 +597,7 @@
     const targetLanguage = language === "en" ? "ru" : "en";
     const layoutVariant = layoutMap.convertKeyboardLayout(original, direction);
     const normalizedOriginal = normalizeWord(original);
+    const normalizedLayoutVariant = normalizeWord(layoutVariant);
     const sourceDictionary = dictionaryFor(language);
     const sourceFrequency = sourceDictionary.words.get(normalizedOriginal) ?? 0;
     const letterCount = normalizedOriginal.replace(/[^a-zа-яё]/gi, "").length;
@@ -604,7 +605,7 @@
     if (
       correctionOptions.protectedTerms.includes(normalizedOriginal) ||
       correctionOptions.protectedTerms.includes(
-        normalizeWord(layoutVariant)
+        normalizedLayoutVariant
       )
     ) {
       return unchangedAnalysis(
@@ -649,7 +650,14 @@
 
     // Короткие заглавные токены чаще являются API, UI, ID и другими
     // сокращениями. Длинные GHBDTN по-прежнему можно исправить в ПРИВЕТ.
-    if (caseStyle(original) === "upper" && letterCount <= 4) {
+    const uppercaseTargetIsKnown =
+      dictionaryFor(targetLanguage).words.has(normalizedLayoutVariant);
+
+    if (
+      caseStyle(original) === "upper" &&
+      letterCount <= 4 &&
+      !uppercaseTargetIsKnown
+    ) {
       return unchangedAnalysis(
         original,
         layoutVariant,
