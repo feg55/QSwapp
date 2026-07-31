@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-theme="system" data-language="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title data-i18n="popupDocumentTitle">Layout Fixer</title>
+    <link rel="stylesheet" href="popup.css">
+    <script src="settings.js" defer></script>
+    <script src="theme.js" defer></script>
+    <script src="i18n.js" defer></script>
+    <script src="popup.js" defer></script>
+  </head>
+  <body>
+    <main class="popup">
+      <header class="popup-header">
+        <img src="icons/icon48.png" alt="" width="42" height="42">
+        <div>
+          <p class="eyebrow">EN ↔ RU</p>
+          <h1 data-i18n="extensionName">Layout Fixer</h1>
+        </div>
+        <div class="header-actions">
+          <div
+            class="preference-buttons"
+            data-i18n-aria-label="appearanceAndLanguage"
+            aria-label="Theme and language"
+          >
+            <button
+              id="popupThemeToggle"
+              class="icon-button preference-button"
+              type="button"
+              title="Switch to light theme"
+              aria-label="Switch to light theme"
+            >
+              <span aria-hidden="true">◐</span>
+            </button>
+            <button
+              id="popupLanguageToggle"
+              class="icon-button preference-button language-button"
+              type="button"
+              title="Switch to Russian"
+              aria-label="Switch to Russian"
+            >
+              EN
+            </button>
+          </div>
+          <button
+            id="openOptions"
+            class="icon-button"
+            type="button"
+            data-i18n-title="allSettings"
+            data-i18n-aria-label="allSettings"
+            title="Open all settings"
+            aria-label="Open all settings"
+          >⚙</button>
+        </div>
+      </header>
+
+      <button id="fixSelection" class="primary-action" type="button">
+        <span class="action-icon" aria-hidden="true">↻</span>
+        <span>
+          <strong data-i18n="fixSelectedText">Fix selected text</strong>
+          <small>Ctrl+Shift+L · ⌘Shift+L</small>
+        </span>
+      </button>
+
+      <section
+        class="quick-settings"
+        data-i18n-aria-label="quickSettings"
+        aria-label="Quick settings"
+      >
+        <label class="quick-setting" for="popupDynamicEnabled">
+          <span>
+            <strong data-i18n="popupAutomaticTitle">Correct while typing</strong>
+            <small data-i18n="popupAutomaticDescription">Check a word after a space</small>
+          </span>
+          <span class="switch">
+            <input id="popupDynamicEnabled" type="checkbox">
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <label class="quick-setting" for="popupAutocorrectTypos">
+          <span>
+            <strong data-i18n="popupTyposTitle">Correct typos</strong>
+            <small data-i18n="popupTyposDescription">One typo after switching layouts</small>
+          </span>
+          <span class="switch">
+            <input id="popupAutocorrectTypos" type="checkbox">
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <label class="quick-setting" for="popupConvertUnknown">
+          <span>
+            <strong data-i18n="popupUnknownTitle">Names and unknown words</strong>
+            <small data-i18n="popupUnknownDescription">Convert a plausible result</small>
+          </span>
+          <span class="switch">
+            <input id="popupConvertUnknown" type="checkbox">
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+      </section>
+
+      <div class="popup-footer">
+        <p
+          id="popupStatus"
+          class="status"
+          role="status"
+          aria-live="polite"
+        ></p>
+        <span id="version" class="version"></span>
+      </div>
+    </main>
+  </body>
+</html>

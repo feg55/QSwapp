@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en" data-theme="system" data-language="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title data-i18n="optionsDocumentTitle">Settings — Layout Fixer</title>
+    <link rel="stylesheet" href="options.css">
+    <script src="settings.js" defer></script>
+    <script src="theme.js" defer></script>
+    <script src="i18n.js" defer></script>
+    <script src="options.js" defer></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <img src="icons/icon128.png" alt="" width="72" height="72">
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="extensionName">Layout Fixer</p>
+          <h1 data-i18n="settingsTitle">Settings</h1>
+          <p class="intro" data-i18n="settingsIntro">
+            Choose how actively the extension should correct your text.
+            All processing happens offline.
+          </p>
+        </div>
+        <div
+          class="preference-buttons"
+          data-i18n-aria-label="appearanceAndLanguage"
+          aria-label="Theme and language"
+        >
+          <button
+            id="themeToggle"
+            class="preference-button"
+            type="button"
+            title="Switch to light theme"
+            aria-label="Switch to light theme"
+          >
+            <span aria-hidden="true">◐</span>
+          </button>
+          <button
+            id="languageToggle"
+            class="preference-button language-button"
+            type="button"
+            title="Switch to Russian"
+            aria-label="Switch to Russian"
+          >
+            EN
+          </button>
+        </div>
+      </header>
+
+      <section class="card" aria-labelledby="manual-heading">
+        <div class="section-heading">
+          <h2 id="manual-heading" data-i18n="manualHeading">Manual correction</h2>
+          <span class="badge" data-i18n="enabledByDefault">Enabled by default</span>
+        </div>
+
+        <label class="setting" for="manualAutocorrectTypos">
+          <span>
+            <strong data-i18n="manualTypoTitle">Correct one typo after switching layouts</strong>
+            <small data-i18n="manualTypoDescription">
+              For example, ghbdtm becomes привет. Ambiguous words remain unchanged.
+            </small>
+          </span>
+          <span class="switch">
+            <input id="manualAutocorrectTypos" type="checkbox">
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <label class="setting" for="manualConvertLikelyUnknown">
+          <span>
+            <strong data-i18n="manualUnknownTitle">Convert likely names and unknown words</strong>
+            <small data-i18n="manualUnknownDescription">
+              Allows conversion when the result is not in the dictionary
+              but looks more plausible than the original text.
+            </small>
+          </span>
+          <span class="switch">
+            <input id="manualConvertLikelyUnknown" type="checkbox">
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <label class="setting" for="manualAggressiveness">
+          <span>
+            <strong data-i18n="manualLevelTitle">Manual correction level</strong>
+            <small data-i18n="manualLevelDescription">
+              Safe mode rejects uncertain replacements more often.
+            </small>
+          </span>
+          <select id="manualAggressiveness" class="select-control">
+            <option value="safe" data-i18n="safe">Safe</option>
+            <option value="balanced" data-i18n="balanced">Balanced</option>
+            <option value="aggressive" data-i18n="aggressive">Aggressive</option>
+          </select>
+        </label>
+
+        <label class="setting" for="manualMinimumLength">
+          <span>
+            <strong data-i18n="minimumWordTitle">Minimum word length</strong>
+            <small data-i18n="minimumWordDescription">From 1 to 12 letters.</small>
+          </span>
+          <input
+            id="manualMinimumLength"
+            class="number-control"
+            type="number"
+            min="1"
+            max="12"
+          >
+        </label>
+      </section>
+
+      <section class="card dynamic-card" aria-labelledby="dynamic-heading">
+        <div class="section-heading">
+          <h2 id="dynamic-heading" data-i18n="automaticHeading">Automatic correction</h2>
+          <span class="badge experimental" data-i18n="whileTyping">While typing</span>
+        </div>
+
+        <label class="setting" for="dynamicEnabled">
+          <span>
+            <strong data-i18n="automaticEnabledTitle">Correct completed words while typing</strong>
+            <small data-i18n="automaticEnabledDescription">
+              After a space or punctuation mark, only the last word is
+              checked. Passwords, URLs, and technical terms are excluded.
+            </small>
+          </span>
+          <span class="switch">
+            <input id="dynamicEnabled" type="checkbox">
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <p class="permission-note" data-i18n="permissionNote">
+          Your browser will request site access when this mode is enabled.
+          Access is used only to detect completed words and is removed when
+          the mode is disabled.
+        </p>
+
+        <label class="setting" for="dynamicAutocorrectTypos">
+          <span>
+            <strong data-i18n="automaticTypoTitle">Correct one typo automatically</strong>
+            <small data-i18n="automaticTypoDescription">This does not affect manual correction.</small>
+          </span>
+          <span class="switch">
+            <input
+              id="dynamicAutocorrectTypos"
+              data-dynamic-option
+              type="checkbox"
+            >
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <label class="setting" for="dynamicConvertLikelyUnknown">
+          <span>
+            <strong data-i18n="automaticUnknownTitle">Convert unknown words automatically</strong>
+            <small data-i18n="automaticUnknownDescription">
+              Disabled by default to avoid changing names and terms without
+              clear dictionary evidence.
+            </small>
+          </span>
+          <span class="switch">
+            <input
+              id="dynamicConvertLikelyUnknown"
+              data-dynamic-option
+              type="checkbox"
+            >
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <label class="setting" for="dynamicAggressiveness">
+          <span>
+            <strong data-i18n="automaticLevelTitle">Automatic correction level</strong>
+            <small data-i18n="automaticLevelDescription">Safe evaluation is used by default.</small>
+          </span>
+          <select
+            id="dynamicAggressiveness"
+            class="select-control"
+            data-dynamic-option
+          >
+            <option value="safe" data-i18n="safe">Safe</option>
+            <option value="balanced" data-i18n="balanced">Balanced</option>
+            <option value="aggressive" data-i18n="aggressive">Aggressive</option>
+          </select>
+        </label>
+
+        <label class="setting" for="dynamicMinimumLength">
+          <span>
+            <strong data-i18n="automaticMinimumTitle">Minimum automatic word length</strong>
+            <small data-i18n="automaticMinimumDescription">Defaults to 3 letters; allowed range is 1 to 12.</small>
+          </span>
+          <input
+            id="dynamicMinimumLength"
+            class="number-control"
+            data-dynamic-option
+            type="number"
+            min="1"
+            max="12"
+          >
+        </label>
+      </section>
+
+      <section class="card" aria-labelledby="exceptions-heading">
+        <div class="section-heading">
+          <h2 id="exceptions-heading" data-i18n="exceptionsHeading">Exceptions and sites</h2>
+          <span class="badge local" data-i18n="storedOnDevice">Stored on this device</span>
+        </div>
+
+        <label class="text-setting" for="protectedTerms">
+          <strong data-i18n="protectedTermsTitle">Words and names that must not be changed</strong>
+          <small data-i18n="protectedTermsDescription">
+            Enter one word or phrase per line, for example
+            <code>ExampleTerm</code> or <code>Local Project</code>.
+          </small>
+          <textarea
+            id="protectedTerms"
+            rows="4"
+            spellcheck="false"
+            data-i18n-placeholder="protectedTermsPlaceholder"
+            placeholder="ExampleTerm&#10;Local Project"
+          ></textarea>
+        </label>
+
+        <label class="text-setting" for="allowedSites">
+          <strong data-i18n="allowedSitesTitle">Allowed sites for automatic correction</strong>
+          <small data-i18n="allowedSitesDescription">
+            Leave empty to allow all sites. A domain is enough:
+            <code>example.com</code> also includes its subdomains.
+          </small>
+          <textarea
+            id="allowedSites"
+            rows="3"
+            spellcheck="false"
+            data-i18n-placeholder="allowedSitesPlaceholder"
+            placeholder="docs.example.com"
+          ></textarea>
+        </label>
+
+        <label class="text-setting" for="blockedSites">
+          <strong data-i18n="blockedSitesTitle">Blocked sites</strong>
+          <small data-i18n="blockedSitesDescription">
+            This list takes priority over allowed sites.
+          </small>
+          <textarea
+            id="blockedSites"
+            rows="3"
+            spellcheck="false"
+            data-i18n-placeholder="blockedSitesPlaceholder"
+            placeholder="bank.example"
+          ></textarea>
+        </label>
+      </section>
+
+      <footer>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+        <p class="privacy" data-i18n="privacyNote">
+          Text is never transmitted. Only mode preferences are synchronized
+          between devices; exceptions remain on this device.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
