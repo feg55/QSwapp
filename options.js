@@ -2,15 +2,15 @@
   const settingsApi =
     typeof module === "object" && module.exports
       ? require("./settings")
-      : root.LayoutFixerSettings;
+      : root.QswappSettings;
   const themeApi =
     typeof module === "object" && module.exports
       ? require("./theme")
-      : root.LayoutFixerTheme;
+      : root.QswappTheme;
   const i18nApi =
     typeof module === "object" && module.exports
       ? require("./i18n")
-      : root.LayoutFixerI18n;
+      : root.QswappI18n;
   const api = factory(settingsApi, themeApi, i18nApi);
 
   if (typeof module === "object" && module.exports) {

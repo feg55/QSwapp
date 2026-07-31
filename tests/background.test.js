@@ -59,7 +59,7 @@ function loadBackground({
       }
     },
     runtime: {
-      id: "layout-fixer-test",
+      id: "qswapp-test",
       lastError: null,
       onMessage: {
         addListener(listener) {
@@ -172,7 +172,7 @@ test("creates exactly one context-menu item without a submenu", async () => {
   assert.deepEqual(
     JSON.parse(JSON.stringify(createdMenus[0])),
     {
-      id: "layout-fixer",
+      id: "qswapp",
     title: "Fix keyboard layout",
       contexts: ["editable"]
     }
@@ -184,7 +184,7 @@ test("injects all layers into the frame where the menu was clicked", async () =>
   const { listeners, injections } = loadBackground();
 
   await listeners.onClicked(
-    { menuItemId: "layout-fixer", frameId: 17 },
+    { menuItemId: "qswapp", frameId: 17 },
     { id: 42 }
   );
 
@@ -218,7 +218,7 @@ test("registers dynamic correction only when enabled and permitted", async () =>
   assert.deepEqual(
     JSON.parse(JSON.stringify(registeredContentScripts[0])),
     {
-      id: "layout-fixer-dynamic",
+      id: "qswapp-dynamic",
       matches: ["http://*/*", "https://*/*"],
       js: [
         "settings.js",
@@ -298,8 +298,8 @@ test("runs manual correction requested by the popup", async () => {
   const loaded = loadBackground();
   let response;
   const keepChannelOpen = loaded.listeners.message(
-    { type: "layout-fixer:run-manual", tabId: 42 },
-    { id: "layout-fixer-test" },
+    { type: "qswapp:run-manual", tabId: 42 },
+    { id: "qswapp-test" },
     (value) => {
       response = value;
     }

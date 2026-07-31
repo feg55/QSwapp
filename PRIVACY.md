@@ -2,7 +2,7 @@
 
 Последнее обновление: 30 июля 2026 года.
 
-Расширение Layout Fixer обрабатывает текст только локально в
+Расширение Qswapp обрабатывает текст только локально в
 браузере. Выделенный и набираемый текст не отправляется разработчику, на
 сторонние серверы или в сервисы аналитики. Расширение не содержит рекламы,
 трекеров и сетевых API для обработки текста.
@@ -46,13 +46,13 @@
 ## Контакты
 
 Вопросы о конфиденциальности можно отправить через
-[issues проекта](https://github.com/feg55/QwerTwist/issues).
+[issues проекта](https://github.com/feg55/QSwapp/issues).
 
 ---
 
 ## Privacy Policy (English summary)
 
-Layout Fixer processes selected and typed text locally in the browser. It
+Qswapp processes selected and typed text locally in the browser. It
 does not transmit text, passwords, correction history, or analytics.
 `storage.sync` contains only correction-mode, theme, and language preferences.
 User-protected terms and site allow/block lists are kept in `storage.local`.

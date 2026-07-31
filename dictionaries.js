@@ -6,14 +6,14 @@
  */
 (function initializeDictionaries(root, factory) {
   const isCommonJs = typeof module === "object" && module.exports;
-  const api = !isCommonJs && root.LayoutFixerDictionaries
-    ? root.LayoutFixerDictionaries
+  const api = !isCommonJs && root.QswappDictionaries
+    ? root.QswappDictionaries
     : factory();
 
   if (isCommonJs) {
     module.exports = api;
   } else {
-    root.LayoutFixerDictionaries = api;
+    root.QswappDictionaries = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function createDictionaries() {
   "use strict";

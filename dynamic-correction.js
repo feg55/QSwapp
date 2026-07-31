@@ -2,24 +2,24 @@
   const analyzer =
     typeof module === "object" && module.exports
       ? require("./word-analyzer")
-      : root.LayoutFixerAnalysisClient;
+      : root.QswappAnalysisClient;
   const settingsApi =
     typeof module === "object" && module.exports
       ? require("./settings")
-      : root.LayoutFixerSettings;
+      : root.QswappSettings;
   const fieldSafety =
     typeof module === "object" && module.exports
       ? require("./field-safety")
-      : root.LayoutFixerFieldSafety;
+      : root.QswappFieldSafety;
   const api = factory(analyzer, settingsApi, fieldSafety);
 
   if (typeof module === "object" && module.exports) {
     module.exports = api;
   } else {
-    root.LayoutFixerDynamic?.disposeDynamicCorrection?.();
-    root.LayoutFixerDynamic = api;
-    root.LayoutFixerDynamic.ready = api.initializeDynamicCorrection();
-    root.LayoutFixerDynamic.ready.catch((error) => {
+    root.QswappDynamic?.disposeDynamicCorrection?.();
+    root.QswappDynamic = api;
+    root.QswappDynamic.ready = api.initializeDynamicCorrection();
+    root.QswappDynamic.ready.catch((error) => {
       console.warn("Could not start automatic correction:", error);
     });
   }

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "minimum_chrome_version": "119",
-  "name": "Layout Fixer",
+  "name": "Qswapp",
   "version": "3.2.0",
   "description": "Corrects text typed with the wrong keyboard layout, manually or while typing.",
   "permissions": [
@@ -31,7 +31,7 @@
     "open_in_tab": true
   },
   "action": {
-    "default_title": "Layout Fixer",
+    "default_title": "Qswapp",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",

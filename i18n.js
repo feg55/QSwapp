@@ -1,19 +1,19 @@
-(function initializeLayoutFixerI18n(root, factory) {
+(function initializeQswappI18n(root, factory) {
   const api = factory();
 
   if (typeof module === "object" && module.exports) {
     module.exports = api;
   } else {
-    root.LayoutFixerI18n = api;
+    root.QswappI18n = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function createI18n() {
   "use strict";
 
   const TRANSLATIONS = Object.freeze({
     en: Object.freeze({
-      extensionName: "Layout Fixer",
-      optionsDocumentTitle: "Settings — Layout Fixer",
-      popupDocumentTitle: "Layout Fixer",
+      extensionName: "Qswapp",
+      optionsDocumentTitle: "Settings — Qswapp",
+      popupDocumentTitle: "Qswapp",
       settingsTitle: "Settings",
       settingsIntro:
         "Choose how actively the extension should correct your text. All processing happens offline.",
@@ -91,9 +91,9 @@
       selectionCheckStarted: "Selected text is being checked"
     }),
     ru: Object.freeze({
-      extensionName: "Layout Fixer",
-      optionsDocumentTitle: "Настройки — Layout Fixer",
-      popupDocumentTitle: "Layout Fixer",
+      extensionName: "Qswapp",
+      optionsDocumentTitle: "Настройки — Qswapp",
+      popupDocumentTitle: "Qswapp",
       settingsTitle: "Настройки",
       settingsIntro:
         "Выберите, насколько активно расширение должно исправлять текст. Все вычисления выполняются офлайн.",

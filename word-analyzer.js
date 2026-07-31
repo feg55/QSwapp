@@ -2,17 +2,17 @@
   const layoutMap =
     typeof module === "object" && module.exports
       ? require("./layout-map")
-      : root.LayoutFixer;
+      : root.Qswapp;
   const dictionaries =
     typeof module === "object" && module.exports
       ? require("./dictionaries")
-      : root.LayoutFixerDictionaries;
+      : root.QswappDictionaries;
   const api = factory(layoutMap, dictionaries);
 
   if (typeof module === "object" && module.exports) {
     module.exports = api;
   } else {
-    root.LayoutFixer = Object.assign(root.LayoutFixer || {}, api);
+    root.Qswapp = Object.assign(root.Qswapp || {}, api);
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function createWordAnalyzer(
   layoutMap,

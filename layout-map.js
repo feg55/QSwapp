@@ -4,7 +4,7 @@
   if (typeof module === "object" && module.exports) {
     module.exports = api;
   } else {
-    root.LayoutFixer = Object.assign(root.LayoutFixer || {}, api);
+    root.Qswapp = Object.assign(root.Qswapp || {}, api);
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function createLayoutMap() {
   "use strict";

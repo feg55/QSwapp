@@ -252,7 +252,7 @@ test("starts manual correction for the active tab", async () => {
   );
   assert.deepEqual(fixture.calls.at(-1), [
     "message",
-    { type: "layout-fixer:run-manual", tabId: 51 }
+    { type: "qswapp:run-manual", tabId: 51 }
   ]);
   assert.equal(documentObject.elements.fixSelection.disabled, false);
 });

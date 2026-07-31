@@ -1,10 +1,10 @@
-(function initializeLayoutFixerSettings(root, factory) {
+(function initializeQswappSettings(root, factory) {
   const api = factory();
 
   if (typeof module === "object" && module.exports) {
     module.exports = api;
   } else {
-    root.LayoutFixerSettings = api;
+    root.QswappSettings = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function createSettings() {
   "use strict";

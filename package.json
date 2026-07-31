@@ -1,5 +1,5 @@
 {
-  "name": "layout-fixer-extension",
+  "name": "qswapp",
   "version": "3.2.0",
   "private": true,
   "description": "Offline correction for text typed with the wrong English or Russian keyboard layout",

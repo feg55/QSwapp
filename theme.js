@@ -4,7 +4,7 @@
   if (typeof module === "object" && module.exports) {
     module.exports = api;
   } else {
-    root.LayoutFixerTheme = api;
+    root.QswappTheme = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function createTheme() {
   "use strict";

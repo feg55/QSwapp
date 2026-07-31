@@ -2,26 +2,26 @@
   const analyzer =
     typeof module === "object" && module.exports
       ? require("./word-analyzer")
-      : root.LayoutFixerAnalysisClient;
+      : root.QswappAnalysisClient;
   const settingsApi =
     typeof module === "object" && module.exports
       ? require("./settings")
-      : root.LayoutFixerSettings;
+      : root.QswappSettings;
   const fieldSafety =
     typeof module === "object" && module.exports
       ? require("./field-safety")
-      : root.LayoutFixerFieldSafety;
+      : root.QswappFieldSafety;
   const api = factory(analyzer, settingsApi, fieldSafety);
 
   if (typeof module === "object" && module.exports) {
     module.exports = api;
   } else {
-    root.LayoutFixer = Object.assign(root.LayoutFixer || {}, api);
+    root.Qswapp = Object.assign(root.Qswapp || {}, api);
     api.runManualCorrection().then((result) => {
-      root.LayoutFixer.lastResult = result;
+      root.Qswapp.lastResult = result;
     }).catch((error) => {
       const result = { ok: false, reason: "unexpected-error" };
-      root.LayoutFixer.lastResult = result;
+      root.Qswapp.lastResult = result;
       api.showFeedback(result);
       console.warn("Could not correct the selection:", error);
     });

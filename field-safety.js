@@ -4,7 +4,7 @@
   if (typeof module === "object" && module.exports) {
     module.exports = api;
   } else {
-    root.LayoutFixerFieldSafety = api;
+    root.QswappFieldSafety = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function createFieldSafety() {
   "use strict";

@@ -4,7 +4,7 @@
   if (typeof module === "object" && module.exports) {
     module.exports = api;
   } else {
-    root.LayoutFixerAnalysisClient = api;
+    root.QswappAnalysisClient = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function createAnalysisClient(
   chromeObject
@@ -20,7 +20,7 @@
 
       chromeObject.runtime.sendMessage(
         {
-          type: "layout-fixer:correct-text",
+          type: "qswapp:correct-text",
           text: String(text),
           options
         },

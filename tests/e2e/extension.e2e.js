@@ -8,9 +8,9 @@ const { chromium } = require("playwright-core");
 
 const EXTENSION_ROOT = path.resolve(__dirname, "../..");
 const SCREENSHOT_DIRECTORY =
-  process.env.LAYOUT_FIXER_SCREENSHOTS_DIR || "";
+  process.env.QSWAPP_SCREENSHOTS_DIR || "";
 const BROWSER_EXECUTABLES = [
-  process.env.LAYOUT_FIXER_BROWSER,
+  process.env.QSWAPP_BROWSER,
   "/opt/homebrew/bin/chromium",
   "/Applications/Chromium.app/Contents/MacOS/Chromium"
 ].filter(Boolean);
@@ -36,12 +36,12 @@ async function launchExtension() {
 
   if (!executablePath) {
     throw new Error(
-      "A compatible browser was not found. Set LAYOUT_FIXER_BROWSER."
+      "A compatible browser was not found. Set QSWAPP_BROWSER."
     );
   }
 
   const userDataDir = fs.mkdtempSync(
-    path.join(os.tmpdir(), "layout-fixer-e2e-")
+    path.join(os.tmpdir(), "qswapp-e2e-")
   );
   const context = await chromium.launchPersistentContext(userDataDir, {
     executablePath,
@@ -148,7 +148,7 @@ test("opens compact settings with square theme and language buttons", async () =
     assert.equal(manifest.action.default_popup, "popup.html");
     assert.equal(
       await page.locator("h1").textContent(),
-      "Layout Fixer"
+      "Qswapp"
     );
     assert.equal(
       await page.locator("html").getAttribute("data-theme"),
@@ -197,7 +197,7 @@ test("opens compact settings with square theme and language buttons", async () =
     );
     assert.equal(
       await page.locator("h1").textContent(),
-      "Layout Fixer"
+      "Qswapp"
     );
     assert.equal(
       await page.locator('[data-i18n="popupAutomaticTitle"]').textContent(),
@@ -243,7 +243,7 @@ test("preserves formatting during a real contenteditable replacement", async () 
       selection.addRange(range);
       host.focus();
 
-      return window.LayoutFixer.replaceSelectedText(document);
+      return window.Qswapp.replaceSelectedText(document);
     });
 
     assert.deepEqual(result, {
@@ -294,7 +294,7 @@ test("corrects a completed word dynamically in a real browser", async () => {
     await page.goto(
       `chrome-extension://${extension.extensionId}/tests/browser-fixture.html`
     );
-    await page.evaluate(() => window.LayoutFixerDynamic.ready);
+    await page.evaluate(() => window.QswappDynamic.ready);
     const input = page.locator("#dynamic-input");
 
     await input.focus();
@@ -328,7 +328,7 @@ test("supports open Shadow DOM and protects custom password widgets", async () =
     await page.goto(
       `chrome-extension://${extension.extensionId}/tests/browser-fixture.html`
     );
-    await page.evaluate(() => window.LayoutFixerDynamic.ready);
+    await page.evaluate(() => window.QswappDynamic.ready);
 
     const manualResult = await page.evaluate(() => {
       const host = document.createElement("div");
@@ -341,7 +341,7 @@ test("supports open Shadow DOM and protects custom password widgets", async () =
       input.focus();
       input.setSelectionRange(0, input.value.length);
 
-      return window.LayoutFixer.replaceSelectedText(document);
+      return window.Qswapp.replaceSelectedText(document);
     });
 
     assert.deepEqual(manualResult, {
@@ -370,7 +370,7 @@ test("supports open Shadow DOM and protects custom password widgets", async () =
       selection.addRange(range);
       widget.focus();
 
-      return window.LayoutFixer.replaceSelectedText(document);
+      return window.Qswapp.replaceSelectedText(document);
     });
 
     assert.deepEqual(protectedResult, {
@@ -429,7 +429,7 @@ test("applies local site lists and protected terms without reload", async () => 
     await page.goto(
       `chrome-extension://${extension.extensionId}/tests/browser-fixture.html`
     );
-    await page.evaluate(() => window.LayoutFixerDynamic.ready);
+    await page.evaluate(() => window.QswappDynamic.ready);
     const input = page.locator("#dynamic-input");
 
     await input.pressSequentially("ghbdtn ");

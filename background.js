@@ -7,10 +7,10 @@ if (typeof importScripts === "function") {
   );
 }
 
-const MENU_ID = "layout-fixer";
-const DYNAMIC_CONTENT_SCRIPT_ID = "layout-fixer-dynamic";
-const SETTINGS_API = globalThis.LayoutFixerSettings;
-const TEXT_ANALYZER = globalThis.LayoutFixer;
+const MENU_ID = "qswapp";
+const DYNAMIC_CONTENT_SCRIPT_ID = "qswapp-dynamic";
+const SETTINGS_API = globalThis.QswappSettings;
+const TEXT_ANALYZER = globalThis.Qswapp;
 const DEFAULT_SETTINGS = SETTINGS_API?.DEFAULT_SETTINGS ?? {
   manual: {
     autocorrectTypos: true,
@@ -31,7 +31,7 @@ const DEFAULT_SETTINGS = SETTINGS_API?.DEFAULT_SETTINGS ?? {
   }
 };
 const DYNAMIC_ORIGINS =
-  globalThis.LayoutFixerSettings?.DYNAMIC_ORIGINS ?? [
+  globalThis.QswappSettings?.DYNAMIC_ORIGINS ?? [
     "http://*/*",
     "https://*/*"
   ];
@@ -245,7 +245,7 @@ chrome.runtime.onMessage?.addListener((message, sender, sendResponse) => {
     return false;
   }
 
-  if (message?.type === "layout-fixer:correct-text") {
+  if (message?.type === "qswapp:correct-text") {
     try {
       if (!TEXT_ANALYZER?.correctText) {
         throw new Error("The background analyzer is not initialized");
@@ -269,7 +269,7 @@ chrome.runtime.onMessage?.addListener((message, sender, sendResponse) => {
   }
 
   if (
-    message?.type === "layout-fixer:run-manual" &&
+    message?.type === "qswapp:run-manual" &&
     Number.isInteger(message.tabId)
   ) {
     runManualCorrectionInTab(message.tabId)

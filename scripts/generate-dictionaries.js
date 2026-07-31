@@ -32,7 +32,7 @@ if (outputArgumentIndex >= 0 && !process.argv[outputArgumentIndex + 1]) {
 function download(url) {
   return new Promise((resolve, reject) => {
     https
-      .get(url, { headers: { "user-agent": "layout-fixer-generator" } }, (response) => {
+      .get(url, { headers: { "user-agent": "qswapp-generator" } }, (response) => {
         if (
           response.statusCode >= 300 &&
           response.statusCode < 400 &&
@@ -115,14 +115,14 @@ function renderDictionary(englishData, russianData) {
  */
 (function initializeDictionaries(root, factory) {
   const isCommonJs = typeof module === "object" && module.exports;
-  const api = !isCommonJs && root.LayoutFixerDictionaries
-    ? root.LayoutFixerDictionaries
+  const api = !isCommonJs && root.QswappDictionaries
+    ? root.QswappDictionaries
     : factory();
 
   if (isCommonJs) {
     module.exports = api;
   } else {
-    root.LayoutFixerDictionaries = api;
+    root.QswappDictionaries = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function createDictionaries() {
   "use strict";
