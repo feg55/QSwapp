@@ -19,7 +19,8 @@
 
 - пользовательские слова и названия, которые нельзя изменять;
 - список разрешённых сайтов;
-- список запрещённых сайтов.
+- список запрещённых сайтов;
+- выбранные категории полей, в которых автоматическое исправление отключено.
 
 Содержимое редактируемых полей, история исправлений и пароли не сохраняются.
 Удаление расширения удаляет его локальное хранилище средствами браузера.
@@ -55,7 +56,8 @@
 Qswapp processes selected and typed text locally in the browser. It
 does not transmit text, passwords, correction history, or analytics.
 `storage.sync` contains only correction-mode, theme, and language preferences.
-User-protected terms and site allow/block lists are kept in `storage.local`.
+User-protected terms, site allow/block lists, and automatic field exclusions
+are kept in `storage.local`.
 Optional HTTP/HTTPS host access is requested only for dynamic correction and
 is removed when that mode is disabled. Privacy questions can be submitted via
 the project issue tracker linked above.

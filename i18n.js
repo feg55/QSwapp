@@ -49,6 +49,12 @@
         "Defaults to 3 letters; allowed range is 1 to 12.",
       exceptionsHeading: "Exceptions and sites",
       storedOnDevice: "Stored on this device",
+      excludedFieldsTitle: "Fields excluded from automatic correction",
+      excludedFieldsDescription:
+        "Passwords, one-time codes and secrets are always protected. Choose the additional field categories to skip.",
+      excludePaymentFields: "Payment and banking details",
+      excludePersonalFields: "Personal and contact data",
+      excludeTechnicalFields: "Technical fields and code",
       protectedTermsTitle: "Words and names that must not be changed",
       protectedTermsDescription:
         "Enter one word or phrase per line, for example ExampleTerm or Local Project.",
@@ -130,6 +136,12 @@
         "По умолчанию 3 буквы; допустимый диапазон — от 1 до 12.",
       exceptionsHeading: "Исключения и сайты",
       storedOnDevice: "На этом устройстве",
+      excludedFieldsTitle: "Поля без автоматического исправления",
+      excludedFieldsDescription:
+        "Пароли, одноразовые коды и секреты защищены всегда. Выберите дополнительные категории полей, которые нужно пропускать.",
+      excludePaymentFields: "Платёжные и банковские данные",
+      excludePersonalFields: "Личные и контактные данные",
+      excludeTechnicalFields: "Технические поля и код",
       protectedTermsTitle: "Слова и названия, которые нельзя изменять",
       protectedTermsDescription:
         "Введите по одному слову или выражению на строку, например ExampleTerm или Local Project.",

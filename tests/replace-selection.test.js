@@ -6,6 +6,7 @@ const {
   replaceInTextControl,
   replaceSelectedText,
   replaceTextSegments,
+  replaceTextSegmentsIndividually,
   showFeedback
 } = require("../replace-selection");
 
@@ -145,6 +146,19 @@ test("replaces text segments without merging their formatting nodes", () => {
   assert.deepEqual(replacements, ["при", "вет"]);
   assert.equal(boldText.data, "при");
   assert.equal(linkedText.data, "вет");
+});
+
+test("awaits individual rich-text segment corrections before mutation", async () => {
+  const first = { data: "ghb" };
+  const second = { data: "dtn" };
+  const replacements = await replaceTextSegmentsIndividually([
+    { node: first, start: 0, end: 3, text: "ghb" },
+    { node: second, start: 0, end: 3, text: "dtn" }
+  ]);
+
+  assert.deepEqual(replacements, ["при", "вет"]);
+  assert.equal(first.data, "при");
+  assert.equal(second.data, "вет");
 });
 
 test("replaces a contenteditable selection while preserving its text nodes", async () => {

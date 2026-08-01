@@ -74,8 +74,12 @@
     const themeKey = theme === "dark" ? "switchToLight" : "switchToDark";
     const languageKey =
       language === "en" ? "switchToRussian" : "switchToEnglish";
+    const themeIcon = themeButton.querySelector?.(".theme-icon");
 
-    themeButton.textContent = theme === "dark" ? "☾" : "☀";
+    themeIcon?.setAttribute(
+      "src",
+      theme === "dark" ? "icons/moon.svg" : "icons/sun.svg"
+    );
     themeButton.title = text(themeKey, documentObject);
     themeButton.setAttribute("aria-label", themeButton.title);
     languageButton.textContent = language.toUpperCase();

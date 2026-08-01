@@ -54,9 +54,18 @@ function createOptionsDocument() {
       disabled: false,
       dynamicOption: true
     },
+    themeIcon: {
+      src: "",
+      setAttribute(name, value) {
+        this[name] = value;
+      }
+    },
     themeToggle: {
       id: "themeToggle",
       textContent: "",
+      querySelector(selector) {
+        return selector === ".theme-icon" ? elements.themeIcon : null;
+      },
       setAttribute(name, value) {
         this[name] = value;
       }
@@ -79,6 +88,18 @@ function createOptionsDocument() {
     blockedSites: {
       id: "blockedSites",
       value: ""
+    },
+    excludePaymentFields: {
+      id: "excludePaymentFields",
+      checked: false
+    },
+    excludePersonalFields: {
+      id: "excludePersonalFields",
+      checked: false
+    },
+    excludeTechnicalFields: {
+      id: "excludeTechnicalFields",
+      checked: false
     },
     status: {
       textContent: "",
@@ -244,7 +265,7 @@ test("restores defaults and disables stale dynamic permission state", async () =
   assert.equal(documentObject.elements.dynamicEnabled.checked, false);
   assert.equal(documentObject.documentElement.dataset.theme, "dark");
   assert.equal(documentObject.documentElement.dataset.language, "en");
-  assert.equal(documentObject.elements.themeToggle.textContent, "☾");
+  assert.equal(documentObject.elements.themeIcon.src, "icons/moon.svg");
   assert.equal(documentObject.elements.languageToggle.textContent, "EN");
   assert.equal(fixture.storageState.dynamic.enabled, false);
   assert.equal(
@@ -264,6 +285,9 @@ test("keeps dynamic mode disabled when site permission is denied", async () => {
   documentObject.elements.dynamicConvertLikelyUnknown.checked = false;
   documentObject.elements.dynamicMinimumLength.value = "3";
   documentObject.elements.dynamicAggressiveness.value = "safe";
+  documentObject.elements.excludePaymentFields.checked = true;
+  documentObject.elements.excludePersonalFields.checked = true;
+  documentObject.elements.excludeTechnicalFields.checked = true;
   documentObject.documentElement.dataset.theme = "dark";
   documentObject.documentElement.dataset.themePreference = "dark";
   documentObject.documentElement.dataset.language = "en";
@@ -287,7 +311,12 @@ test("keeps dynamic mode disabled when site permission is denied", async () => {
     {
       protectedTerms: ["Б.Ю. Иванов"],
       allowedSites: [],
-      blockedSites: ["bank.example"]
+      blockedSites: ["bank.example"],
+      excludedFieldCategories: [
+        "payment",
+        "personal",
+        "technical"
+      ]
     }
   ]);
   assert.equal(
@@ -310,6 +339,40 @@ test("removes site permission when dynamic mode is switched off", async () => {
       { origins: ["http://*/*", "https://*/*"] }
     ]
   ]);
+});
+
+test("enables automatic controls immediately after permission is granted", async () => {
+  const documentObject = createOptionsDocument();
+  const fixture = createChrome({ requestGranted: true });
+  documentObject.elements.manualAutocorrectTypos.checked = true;
+  documentObject.elements.manualConvertLikelyUnknown.checked = true;
+  documentObject.elements.manualMinimumLength.value = "1";
+  documentObject.elements.manualAggressiveness.value = "balanced";
+  documentObject.elements.dynamicEnabled.checked = true;
+  documentObject.elements.dynamicAutocorrectTypos.checked = true;
+  documentObject.elements.dynamicConvertLikelyUnknown.checked = false;
+  documentObject.elements.dynamicMinimumLength.value = "3";
+  documentObject.elements.dynamicAggressiveness.value = "safe";
+  documentObject.elements.excludePaymentFields.checked = true;
+  documentObject.elements.excludePersonalFields.checked = true;
+  documentObject.elements.excludeTechnicalFields.checked = true;
+  documentObject.elements.dynamicAutocorrectTypos.disabled = true;
+  documentObject.elements.dynamicConvertLikelyUnknown.disabled = true;
+  documentObject.elements.dynamicMinimumLength.disabled = true;
+  documentObject.elements.dynamicAggressiveness.disabled = true;
+
+  await saveOptions(
+    documentObject,
+    fixture.chromeObject,
+    documentObject.elements.dynamicEnabled
+  );
+
+  assert.equal(
+    documentObject.elements.dynamicAutocorrectTypos.disabled,
+    false
+  );
+  assert.equal(documentObject.elements.dynamicAggressiveness.disabled, false);
+  assert.equal(documentObject.elements.dynamicMinimumLength.disabled, false);
 });
 
 test("changes theme and language only after their buttons are used", () => {

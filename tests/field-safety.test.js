@@ -3,8 +3,10 @@ const assert = require("node:assert/strict");
 
 const {
   correctionOptionsForField,
+  fieldCategories,
   isSensitiveField,
-  isStrictTextField
+  isStrictTextField,
+  shouldSkipAutomaticField
 } = require("../field-safety");
 
 function createElement(attributes = {}, parentElement = null) {
@@ -87,4 +89,34 @@ test("uses strict domain protection for URL and email fields", () => {
     true
   );
   assert.equal(isStrictTextField(createElement({ type: "text" })), false);
+});
+
+test("reads associated labels and applies configurable automatic exclusions", () => {
+  const verificationLabel = createElement({ id: "verification-label" });
+  verificationLabel.textContent = "Код подтверждения";
+  const verificationField = createElement({
+    "aria-labelledby": "verification-label"
+  });
+  verificationField.ownerDocument = {
+    getElementById(id) {
+      return id === "verification-label" ? verificationLabel : null;
+    }
+  };
+  const paymentField = createElement({ autocomplete: "cc-number" });
+  const personalField = createElement({ "aria-label": "E-mail" });
+  const technicalField = createElement({ className: "source-code-editor" });
+
+  assert.deepEqual(
+    fieldCategories(verificationField),
+    ["credentials", "technical"]
+  );
+  assert.equal(shouldSkipAutomaticField(verificationField, []), true);
+  assert.equal(shouldSkipAutomaticField(paymentField, ["payment"]), true);
+  assert.equal(shouldSkipAutomaticField(paymentField, []), false);
+  assert.equal(shouldSkipAutomaticField(personalField, ["personal"]), true);
+  assert.equal(shouldSkipAutomaticField(personalField, []), false);
+  assert.equal(
+    shouldSkipAutomaticField(technicalField, ["technical"]),
+    true
+  );
 });

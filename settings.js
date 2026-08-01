@@ -34,8 +34,18 @@
   const DEFAULT_LOCAL_SETTINGS = Object.freeze({
     protectedTerms: Object.freeze([]),
     allowedSites: Object.freeze([]),
-    blockedSites: Object.freeze([])
+    blockedSites: Object.freeze([]),
+    excludedFieldCategories: Object.freeze([
+      "payment",
+      "personal",
+      "technical"
+    ])
   });
+  const FIELD_EXCLUSION_CATEGORIES = Object.freeze([
+    "payment",
+    "personal",
+    "technical"
+  ]);
   const DYNAMIC_ORIGINS = Object.freeze([
     "http://*/*",
     "https://*/*"
@@ -151,19 +161,45 @@
       return "";
     }
 
-    rule = rule
-      .replace(/^[a-z][a-z0-9+.-]*:\/\//u, "")
-      .split(/[/?#]/u, 1)[0]
-      .replace(/^\*\./u, "")
-      .replace(/^\.+|\.+$/gu, "");
+    rule = rule.replace(/^\*\./u, "");
 
-    if (rule.startsWith("[") && rule.includes("]")) {
-      rule = rule.slice(1, rule.indexOf("]"));
-    } else {
-      rule = rule.replace(/:\d+$/u, "");
+    if (
+      !/^[a-z][a-z0-9+.-]*:\/\//u.test(rule) &&
+      !rule.startsWith("[") &&
+      (rule.match(/:/gu) || []).length > 1
+    ) {
+      rule = `[${rule}]`;
     }
 
-    return /^[a-z0-9а-яё.-]+$/u.test(rule) ? rule : "";
+    try {
+      const parsed = new URL(
+        /^[a-z][a-z0-9+.-]*:\/\//u.test(rule)
+          ? rule
+          : `http://${rule}`
+      );
+
+      if (
+        !["http:", "https:"].includes(parsed.protocol) ||
+        parsed.username ||
+        parsed.password
+      ) {
+        return "";
+      }
+
+      const hostname = parsed.hostname
+        .toLocaleLowerCase()
+        .replace(/\.$/u, "");
+      const isIpv6 = /^\[[0-9a-f:.]+\]$/iu.test(hostname);
+      const isDnsName =
+        hostname.length <= 253 &&
+        /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/u.test(
+          hostname
+        );
+
+      return isIpv6 || isDnsName ? hostname : "";
+    } catch {
+      return "";
+    }
   }
 
   function normalizeSiteList(value) {
@@ -173,10 +209,23 @@
   }
 
   function normalizeLocalSettings(value = {}) {
+    const excludedFieldCategories = Array.isArray(
+      value.excludedFieldCategories
+    )
+      ? value.excludedFieldCategories
+      : DEFAULT_LOCAL_SETTINGS.excludedFieldCategories;
+
     return {
       protectedTerms: normalizeList(value.protectedTerms, 500, 160),
       allowedSites: normalizeSiteList(value.allowedSites),
-      blockedSites: normalizeSiteList(value.blockedSites)
+      blockedSites: normalizeSiteList(value.blockedSites),
+      excludedFieldCategories: Array.from(
+        new Set(
+          excludedFieldCategories.filter((category) =>
+            FIELD_EXCLUSION_CATEGORIES.includes(category)
+          )
+        )
+      )
     };
   }
 
@@ -200,7 +249,7 @@
   }
 
   function siteRuleMatches(hostname, rule) {
-    const host = String(hostname || "").toLocaleLowerCase().replace(/\.$/u, "");
+    const host = normalizeSiteRule(hostname);
     const normalizedRule = normalizeSiteRule(rule);
 
     return Boolean(
@@ -211,11 +260,11 @@
 
   function hostnameFrom(value) {
     if (typeof value === "object" && value?.hostname) {
-      return value.hostname;
+      return normalizeSiteRule(value.hostname);
     }
 
     try {
-      return new URL(String(value)).hostname;
+      return normalizeSiteRule(new URL(String(value)).hostname);
     } catch {
       return normalizeSiteRule(value);
     }
@@ -281,11 +330,13 @@
 
   function dynamicCorrectionOptions(value = {}, localSettings = {}) {
     const settings = normalizeSettings(value);
+    const local = normalizeLocalSettings(localSettings);
 
     return {
       ...settings.dynamic,
       dynamicCorrection: settings.dynamic.enabled,
-      protectedTerms: normalizeLocalSettings(localSettings).protectedTerms
+      protectedTerms: local.protectedTerms,
+      excludedFieldCategories: local.excludedFieldCategories
     };
   }
 
@@ -296,6 +347,7 @@
     DEFAULT_MANUAL_SETTINGS,
     DEFAULT_SETTINGS,
     DYNAMIC_ORIGINS,
+    FIELD_EXCLUSION_CATEGORIES,
     dynamicCorrectionOptions,
     isSiteAllowed,
     loadLocalSettings,

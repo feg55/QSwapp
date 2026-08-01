@@ -10,6 +10,7 @@ const {
   loadSettings,
   manualCorrectionOptions,
   normalizeLocalSettings,
+  normalizeSiteRule,
   normalizeSettings,
   saveLocalSettings,
   saveSettings
@@ -185,7 +186,12 @@ test("returns independent analyzer options for manual and dynamic modes", () => 
   assert.deepEqual(dynamicCorrectionOptions(settings), {
     ...settings.dynamic,
     dynamicCorrection: true,
-    protectedTerms: []
+    protectedTerms: [],
+    excludedFieldCategories: [
+      "payment",
+      "personal",
+      "technical"
+    ]
   });
 });
 
@@ -212,7 +218,12 @@ test("normalizes local exclusions and evaluates site lists", async () => {
   assert.deepEqual(local, {
     protectedTerms: ["ExampleTerm", "Б.Ю. Иванов"],
     allowedSites: ["example.com", "docs.example.org"],
-    blockedSites: ["private.example.com"]
+    blockedSites: ["private.example.com"],
+    excludedFieldCategories: [
+      "payment",
+      "personal",
+      "technical"
+    ]
   });
   assert.equal(isSiteAllowed("https://www.example.com/page", local), true);
   assert.equal(isSiteAllowed("https://private.example.com", local), false);
@@ -222,4 +233,27 @@ test("normalizes local exclusions and evaluates site lists", async () => {
     local
   );
   assert.deepEqual(calls, [local]);
+});
+
+test("canonicalizes IDN and IPv6 site rules before matching", () => {
+  assert.equal(normalizeSiteRule("банк.рф"), "xn--80ab2al.xn--p1ai");
+  assert.equal(normalizeSiteRule("[::1]"), "[::1]");
+  assert.equal(
+    isSiteAllowed("https://банк.рф/login", {
+      blockedSites: ["банк.рф"]
+    }),
+    false
+  );
+  assert.equal(
+    isSiteAllowed("http://[::1]/", {
+      blockedSites: ["[::1]"]
+    }),
+    false
+  );
+  assert.equal(
+    isSiteAllowed("https://example.com", {
+      excludedFieldCategories: []
+    }),
+    true
+  );
 });

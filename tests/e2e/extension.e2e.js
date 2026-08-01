@@ -78,6 +78,9 @@ test("assigns system appearance once and loads the settings page", async () => {
     await page.goto(
       `chrome-extension://${extension.extensionId}/options.html`
     );
+    await page.waitForFunction(
+      () => document.documentElement.dataset.theme === "dark"
+    );
 
     assert.equal(await page.locator("h1").textContent(), "Settings");
     assert.equal(
@@ -263,6 +266,42 @@ test("preserves formatting during a real contenteditable replacement", async () 
       await page.locator("#formatted-editable a").getAttribute("href"),
       "#"
     );
+
+    const blockResult = await page.evaluate(async () => {
+      const host = document.createElement("div");
+      host.id = "block-editable";
+      host.contentEditable = "true";
+      const first = document.createElement("div");
+      const second = document.createElement("div");
+      first.textContent = "ghb";
+      second.textContent = "dtn";
+      host.append(first, second);
+      document.body.appendChild(host);
+      const range = document.createRange();
+      range.setStart(first.firstChild, 0);
+      range.setEnd(second.firstChild, second.firstChild.data.length);
+      const selection = getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      host.focus();
+
+      const result = await window.Qswapp.replaceSelectedText(document);
+      return {
+        result,
+        first: first.textContent,
+        second: second.textContent
+      };
+    });
+
+    assert.deepEqual(blockResult, {
+      result: {
+        ok: true,
+        changed: true,
+        correctedText: "при\nвет"
+      },
+      first: "при",
+      second: "вет"
+    });
   } finally {
     await extension.close();
   }
@@ -452,6 +491,25 @@ test("applies local site lists and protected terms without reload", async () => 
     await input.pressSequentially("ghbdtn ");
     await page.waitForFunction(
       () => document.getElementById("dynamic-input").value === "привет "
+    );
+
+    await page.evaluate(() => {
+      const personal = document.createElement("input");
+      personal.id = "personal-input";
+      personal.setAttribute("aria-label", "E-mail");
+      document.body.appendChild(personal);
+    });
+    const personalInput = page.locator("#personal-input");
+    await personalInput.pressSequentially("ghbdtn ");
+    assert.equal(await personalInput.inputValue(), "ghbdtn ");
+
+    await extension.serviceWorker.evaluate(async () => {
+      await chrome.storage.local.set({ excludedFieldCategories: [] });
+    });
+    await personalInput.fill("");
+    await personalInput.pressSequentially("ghbdtn ");
+    await page.waitForFunction(
+      () => document.getElementById("personal-input").value === "привет "
     );
   } finally {
     await extension.close();

@@ -34,6 +34,17 @@
   const ALLOWED_INPUT_TYPES = new Set(["", "text", "search"]);
   let activeCleanup = null;
 
+  function shouldSkipField(node, options = {}) {
+    if (fieldSafety?.shouldSkipAutomaticField) {
+      return fieldSafety.shouldSkipAutomaticField(
+        node,
+        options.excludedFieldCategories
+      );
+    }
+
+    return Boolean(fieldSafety?.isSensitiveField?.(node));
+  }
+
   function shouldInspectInput(event) {
     if (
       !event ||
@@ -142,7 +153,7 @@
       typeof start !== "number" ||
       start !== end ||
       String(element.type || "").toLowerCase() === "password" ||
-      fieldSafety?.isSensitiveField?.(element)
+      shouldSkipField(element, options)
     ) {
       return { changed: false, reason: "unsupported-control" };
     }
@@ -239,7 +250,7 @@
 
     if (
       !host ||
-      fieldSafety?.isSensitiveField?.(host) ||
+      shouldSkipField(host, options) ||
       (eventTarget !== host && !host.contains?.(eventTarget))
     ) {
       return { changed: false, reason: "unsupported-control" };
@@ -312,7 +323,7 @@
     const view = documentObject.defaultView;
     const target = event.composedPath?.()[0] || event.target;
 
-    if (fieldSafety?.isSensitiveField?.(target)) {
+    if (shouldSkipField(target, options)) {
       return { changed: false, reason: "protected-field" };
     }
 

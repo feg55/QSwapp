@@ -56,8 +56,12 @@
     const themeKey = theme === "dark" ? "switchToLight" : "switchToDark";
     const languageKey =
       language === "en" ? "switchToRussian" : "switchToEnglish";
+    const themeIcon = themeButton.querySelector?.(".theme-icon");
 
-    themeButton.textContent = theme === "dark" ? "☾" : "☀";
+    themeIcon?.setAttribute(
+      "src",
+      theme === "dark" ? "icons/moon.svg" : "icons/sun.svg"
+    );
     themeButton.title = text(themeKey, documentObject);
     themeButton.setAttribute("aria-label", themeButton.title);
     languageButton.textContent = language.toUpperCase();
@@ -148,7 +152,23 @@
       protectedTerms:
         documentObject.getElementById("protectedTerms").value,
       allowedSites: documentObject.getElementById("allowedSites").value,
-      blockedSites: documentObject.getElementById("blockedSites").value
+      blockedSites: documentObject.getElementById("blockedSites").value,
+      excludedFieldCategories: [
+        [
+          "payment",
+          documentObject.getElementById("excludePaymentFields").checked
+        ],
+        [
+          "personal",
+          documentObject.getElementById("excludePersonalFields").checked
+        ],
+        [
+          "technical",
+          documentObject.getElementById("excludeTechnicalFields").checked
+        ]
+      ]
+        .filter(([, checked]) => checked)
+        .map(([category]) => category)
     });
   }
 
@@ -190,6 +210,12 @@
       settings.allowedSites.join("\n");
     documentObject.getElementById("blockedSites").value =
       settings.blockedSites.join("\n");
+    documentObject.getElementById("excludePaymentFields").checked =
+      settings.excludedFieldCategories.includes("payment");
+    documentObject.getElementById("excludePersonalFields").checked =
+      settings.excludedFieldCategories.includes("personal");
+    documentObject.getElementById("excludeTechnicalFields").checked =
+      settings.excludedFieldCategories.includes("technical");
   }
 
   function setStatus(messageKey, isError, documentObject) {
@@ -283,6 +309,8 @@
       }
     }
 
+    updateDynamicControls(documentObject, settings.dynamic.enabled);
+
     await Promise.all([
       settingsApi.saveSettings(settings, chromeObject?.storage?.sync),
       settingsApi.saveLocalSettings(
@@ -315,6 +343,13 @@
     )) {
       control.addEventListener("change", (event) => {
         const changedControl = event.currentTarget;
+
+        if (changedControl?.id === "dynamicEnabled") {
+          updateDynamicControls(
+            documentObject,
+            changedControl.checked
+          );
+        }
 
         saveQueue = saveQueue.then(async () => {
           try {

@@ -34,7 +34,14 @@
             title="Switch to light theme"
             aria-label="Switch to light theme"
           >
-            <span aria-hidden="true">◐</span>
+            <img
+              class="theme-icon"
+              src="icons/moon.svg"
+              alt=""
+              width="19"
+              height="19"
+              aria-hidden="true"
+            >
           </button>
           <button
             id="languageToggle"
@@ -206,6 +213,40 @@
           <h2 id="exceptions-heading" data-i18n="exceptionsHeading">Exceptions and sites</h2>
           <span class="badge local" data-i18n="storedOnDevice">Stored on this device</span>
         </div>
+
+        <fieldset class="field-exclusions">
+          <legend data-i18n="excludedFieldsTitle">
+            Fields excluded from automatic correction
+          </legend>
+          <p data-i18n="excludedFieldsDescription">
+            Passwords, one-time codes and secrets are always protected.
+            Choose the additional field categories to skip.
+          </p>
+
+          <label class="field-exclusion" for="excludePaymentFields">
+            <span data-i18n="excludePaymentFields">Payment and banking details</span>
+            <span class="switch">
+              <input id="excludePaymentFields" type="checkbox">
+              <span aria-hidden="true"></span>
+            </span>
+          </label>
+
+          <label class="field-exclusion" for="excludePersonalFields">
+            <span data-i18n="excludePersonalFields">Personal and contact data</span>
+            <span class="switch">
+              <input id="excludePersonalFields" type="checkbox">
+              <span aria-hidden="true"></span>
+            </span>
+          </label>
+
+          <label class="field-exclusion" for="excludeTechnicalFields">
+            <span data-i18n="excludeTechnicalFields">Technical fields and code</span>
+            <span class="switch">
+              <input id="excludeTechnicalFields" type="checkbox">
+              <span aria-hidden="true"></span>
+            </span>
+          </label>
+        </fieldset>
 
         <label class="text-setting" for="protectedTerms">
           <strong data-i18n="protectedTermsTitle">Words and names that must not be changed</strong>

@@ -18,6 +18,7 @@
   --thumb: #f7faff;
   --success: #69d39b;
   --danger: #ff8c86;
+  --theme-icon-filter: invert(1);
 }
 
 :root[data-theme="light"] {
@@ -37,6 +38,7 @@
   --thumb: #fff;
   --success: #27704a;
   --danger: #a33b35;
+  --theme-icon-filter: none;
 }
 
 * {
@@ -121,6 +123,15 @@ h1 {
   font-size: 15px;
   font-weight: 800;
   line-height: 1;
+}
+
+.theme-icon {
+  display: block;
+  width: 17px;
+  height: 17px;
+  margin: auto;
+  filter: var(--theme-icon-filter);
+  pointer-events: none;
 }
 
 .language-button {
@@ -310,5 +321,6 @@ select:focus-visible {
     --thumb: #fff;
     --success: #27704a;
     --danger: #a33b35;
+    --theme-icon-filter: none;
   }
 }

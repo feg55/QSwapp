@@ -31,19 +31,22 @@ function createDocument() {
   };
 }
 
-function createControl(value, caret, type = "text") {
+function createControl(value, caret, type = "text", attributes = {}) {
   const documentObject = createDocument();
   const events = [];
   const control = {
     nodeType: 1,
     tagName: "INPUT",
     type,
+    name: attributes.name || "",
+    id: attributes.id || "",
+    className: attributes.className || "",
     value,
     selectionStart: caret,
     selectionEnd: caret,
     ownerDocument: documentObject,
-    getAttribute() {
-      return null;
+    getAttribute(name) {
+      return attributes[name] ?? null;
     },
     dispatchEvent(event) {
       events.push(event);
@@ -149,6 +152,51 @@ test("does not inspect partial input, disabled mode or password fields", async (
     { changed: false, reason: "protected-field" }
   );
   assert.equal(password.control.value, "ghbdtn ");
+});
+
+test("uses local field categories for automatic exclusions", async () => {
+  const excluded = createControl("ghbdtn ", 7, "text", {
+    "aria-label": "E-mail"
+  });
+  const allowed = createControl("ghbdtn ", 7, "text", {
+    "aria-label": "E-mail"
+  });
+  const eventFor = (target) => ({
+    target,
+    inputType: "insertText",
+    data: " ",
+    defaultPrevented: false,
+    isComposing: false
+  });
+
+  assert.deepEqual(
+    await processInputEvent(
+      eventFor(excluded.control),
+      {
+        dynamicCorrection: true,
+        excludedFieldCategories: ["personal"]
+      },
+      excluded.documentObject
+    ),
+    { changed: false, reason: "protected-field" }
+  );
+  assert.equal(excluded.control.value, "ghbdtn ");
+
+  assert.equal(
+    (
+      await processInputEvent(
+        eventFor(allowed.control),
+        {
+          dynamicCorrection: true,
+          convertLikelyUnknown: true,
+          excludedFieldCategories: []
+        },
+        allowed.documentObject
+      )
+    ).changed,
+    true
+  );
+  assert.equal(allowed.control.value, "привет ");
 });
 
 test("corrects a completed token in a simple contenteditable text node", async () => {

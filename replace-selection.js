@@ -277,9 +277,11 @@
     return replacements;
   }
 
-  function replaceTextSegmentsIndividually(segments, options = {}) {
-    const replacements = segments.map((segment) =>
-      analyzer.correctText(segment.text, options)
+  async function replaceTextSegmentsIndividually(segments, options = {}) {
+    const replacements = await Promise.all(
+      segments.map((segment) =>
+        analyzer.correctText(segment.text, options)
+      )
     );
 
     segments.forEach((segment, index) => {
@@ -373,7 +375,7 @@
     const replacements =
       selectedNodeText === selectedText
         ? replaceTextSegments(segments, correctedText)
-        : replaceTextSegmentsIndividually(segments, effectiveOptions);
+        : await replaceTextSegmentsIndividually(segments, effectiveOptions);
     const selectionRange = documentObject.createRange();
     const first = segments[0];
     const last = segments[segments.length - 1];
@@ -501,6 +503,7 @@
     replaceInTextControl,
     replaceSelectedText,
     replaceTextSegments,
+    replaceTextSegmentsIndividually,
     runManualCorrection,
     showFeedback
   };

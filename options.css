@@ -28,6 +28,7 @@
   --badge-green-text: #8ed7bc;
   --success: #69d39b;
   --danger: #ff8c86;
+  --theme-icon-filter: invert(1);
 }
 
 :root[data-theme="light"] {
@@ -57,6 +58,7 @@
   --badge-green-text: #356650;
   --success: #27704a;
   --danger: #a33b35;
+  --theme-icon-filter: none;
 }
 
 * {
@@ -131,6 +133,14 @@ body {
   border-color: var(--accent);
   outline: 3px solid rgba(57, 113, 230, 0.22);
   outline-offset: 2px;
+}
+
+.theme-icon {
+  display: block;
+  width: 19px;
+  height: 19px;
+  filter: var(--theme-icon-filter);
+  pointer-events: none;
 }
 
 .language-button {
@@ -237,6 +247,42 @@ h2 {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.5;
+}
+
+.field-exclusions {
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--divider);
+  padding: 22px 24px;
+}
+
+.field-exclusions legend {
+  padding: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.field-exclusions > p {
+  margin: 6px 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.field-exclusion {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-radius: 9px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.field-exclusion:hover {
+  background: var(--code-bg);
 }
 
 code {
@@ -434,6 +480,7 @@ footer {
     --badge-green-text: #356650;
     --success: #27704a;
     --danger: #a33b35;
+    --theme-icon-filter: none;
   }
 }
 

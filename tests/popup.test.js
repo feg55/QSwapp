@@ -22,9 +22,20 @@ function createPopupDocument() {
       id: "popupConvertUnknown",
       checked: false
     },
+    popupThemeIcon: {
+      src: "",
+      setAttribute(name, value) {
+        this[name] = value;
+      }
+    },
     popupThemeToggle: {
       id: "popupThemeToggle",
       textContent: "",
+      querySelector(selector) {
+        return selector === ".theme-icon"
+          ? elements.popupThemeIcon
+          : null;
+      },
       setAttribute(name, value) {
         this[name] = value;
       }
@@ -163,7 +174,10 @@ test("restores compact settings with saved appearance", async () => {
   assert.equal(settings.appearance.language, "en");
   assert.equal(documentObject.documentElement.dataset.theme, "dark");
   assert.equal(documentObject.documentElement.dataset.language, "en");
-  assert.equal(documentObject.elements.popupThemeToggle.textContent, "☾");
+  assert.equal(
+    documentObject.elements.popupThemeIcon.src,
+    "icons/moon.svg"
+  );
   assert.equal(documentObject.elements.popupLanguageToggle.textContent, "EN");
   assert.equal(documentObject.elements.popupAutocorrectTypos.checked, true);
   assert.equal(documentObject.elements.popupConvertUnknown.checked, true);
