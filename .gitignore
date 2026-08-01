@@ -1,4 +1,57 @@
+# Dependencies
 node_modules/
-.DS_Store
+
+# Test and coverage output
 test-results/
 playwright-report/
+blob-report/
+coverage/
+.nyc_output/
+
+# Extension packages and signing secrets
+dist/
+build/
+out/
+*.zip
+*.crx
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.cache/
+.tmp/
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Local browser profiles
+.playwright/
+.chrome-profile/
+.edge-profile/
+chrome-profile/
+edge-profile/
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
