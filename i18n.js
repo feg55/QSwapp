@@ -47,14 +47,24 @@
       automaticMinimumTitle: "Minimum automatic word length",
       automaticMinimumDescription:
         "Defaults to 3 letters; allowed range is 1 to 12.",
+      automaticExcludedFieldsTitle:
+        "Do not correct automatically in these fields",
+      automaticExcludedFieldsDescription:
+        "These exclusions are stored only on this device.",
+      excludePasswordFields: "Password fields",
+      excludePasswordFieldsDescription:
+        "Includes native, masked and custom password inputs. Disabling this protection may change a password while it is being typed.",
+      excludeApiSecretFields: "API keys and access tokens",
+      excludeApiSecretFieldsDescription:
+        "Includes client secrets, private keys and authentication tokens.",
+      excludeOneTimeCodeFields: "One-time and recovery codes",
+      excludeOneTimeCodeFieldsDescription:
+        "Includes OTP, verification, backup and security codes.",
+      excludePaymentFields: "Payment fields",
+      excludePaymentFieldsDescription:
+        "Includes bank card numbers, CVV/CVC and IBAN.",
       exceptionsHeading: "Exceptions and sites",
       storedOnDevice: "Stored on this device",
-      excludedFieldsTitle: "Fields excluded from automatic correction",
-      excludedFieldsDescription:
-        "Passwords, one-time codes and secrets are always protected. Choose the additional field categories to skip.",
-      excludePaymentFields: "Payment and banking details",
-      excludePersonalFields: "Personal and contact data",
-      excludeTechnicalFields: "Technical fields and code",
       protectedTermsTitle: "Words and names that must not be changed",
       protectedTermsDescription:
         "Enter one word or phrase per line, for example ExampleTerm or Local Project.",
@@ -134,14 +144,24 @@
       automaticMinimumTitle: "Минимальная длина слова для авторежима",
       automaticMinimumDescription:
         "По умолчанию 3 буквы; допустимый диапазон — от 1 до 12.",
+      automaticExcludedFieldsTitle:
+        "Не исправлять автоматически в этих полях",
+      automaticExcludedFieldsDescription:
+        "Эти исключения хранятся только на текущем устройстве.",
+      excludePasswordFields: "Парольные поля",
+      excludePasswordFieldsDescription:
+        "Включая нативные, маскированные и нестандартные поля. Отключение защиты может изменить пароль при вводе.",
+      excludeApiSecretFields: "API-ключи и токены доступа",
+      excludeApiSecretFieldsDescription:
+        "Включая client secret, приватные ключи и токены авторизации.",
+      excludeOneTimeCodeFields: "Одноразовые и резервные коды",
+      excludeOneTimeCodeFieldsDescription:
+        "Включая OTP, коды подтверждения, восстановления и безопасности.",
+      excludePaymentFields: "Платёжные поля",
+      excludePaymentFieldsDescription:
+        "Включая номера банковских карт, CVV/CVC и IBAN.",
       exceptionsHeading: "Исключения и сайты",
       storedOnDevice: "На этом устройстве",
-      excludedFieldsTitle: "Поля без автоматического исправления",
-      excludedFieldsDescription:
-        "Пароли, одноразовые коды и секреты защищены всегда. Выберите дополнительные категории полей, которые нужно пропускать.",
-      excludePaymentFields: "Платёжные и банковские данные",
-      excludePersonalFields: "Личные и контактные данные",
-      excludeTechnicalFields: "Технические поля и код",
       protectedTermsTitle: "Слова и названия, которые нельзя изменять",
       protectedTermsDescription:
         "Введите по одному слову или выражению на строку, например ExampleTerm или Local Project.",

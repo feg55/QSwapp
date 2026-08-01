@@ -36,15 +36,17 @@
     allowedSites: Object.freeze([]),
     blockedSites: Object.freeze([]),
     excludedFieldCategories: Object.freeze([
+      "passwords",
+      "apiSecrets",
+      "oneTimeCodes",
       "payment",
-      "personal",
-      "technical"
     ])
   });
   const FIELD_EXCLUSION_CATEGORIES = Object.freeze([
+    "passwords",
+    "apiSecrets",
+    "oneTimeCodes",
     "payment",
-    "personal",
-    "technical"
   ]);
   const DYNAMIC_ORIGINS = Object.freeze([
     "http://*/*",
@@ -209,11 +211,28 @@
   }
 
   function normalizeLocalSettings(value = {}) {
-    const excludedFieldCategories = Array.isArray(
+    const storedExcludedFieldCategories = Array.isArray(
       value.excludedFieldCategories
     )
       ? value.excludedFieldCategories
       : DEFAULT_LOCAL_SETTINGS.excludedFieldCategories;
+    const excludedFieldCategories = storedExcludedFieldCategories.flatMap(
+      (category) => {
+        if (category === "technical") {
+          return ["apiSecrets"];
+        }
+
+        if (category === "credentials") {
+          return ["passwords", "apiSecrets", "oneTimeCodes"];
+        }
+
+        if (category === "personal") {
+          return [];
+        }
+
+        return [category];
+      }
+    );
 
     return {
       protectedTerms: normalizeList(value.protectedTerms, 500, 160),

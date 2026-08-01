@@ -249,40 +249,27 @@ h2 {
   line-height: 1.5;
 }
 
-.field-exclusions {
-  margin: 0;
-  border: 0;
+.subsection-heading {
+  border-top: 1px solid var(--divider);
   border-bottom: 1px solid var(--divider);
-  padding: 22px 24px;
+  padding: 18px 24px;
+  background: var(--control-bg);
 }
 
-.field-exclusions legend {
-  padding: 0;
+.subsection-heading strong,
+.subsection-heading small {
+  display: block;
+}
+
+.subsection-heading strong {
+  margin-bottom: 5px;
   font-size: 15px;
-  font-weight: 700;
 }
 
-.field-exclusions > p {
-  margin: 6px 0 14px;
+.subsection-heading small {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.5;
-}
-
-.field-exclusion {
-  display: flex;
-  min-height: 42px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  border-radius: 9px;
-  padding: 8px 10px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.field-exclusion:hover {
-  background: var(--code-bg);
 }
 
 code {

@@ -155,16 +155,20 @@
       blockedSites: documentObject.getElementById("blockedSites").value,
       excludedFieldCategories: [
         [
+          "passwords",
+          documentObject.getElementById("excludePasswordFields").checked
+        ],
+        [
+          "apiSecrets",
+          documentObject.getElementById("excludeApiSecretFields").checked
+        ],
+        [
+          "oneTimeCodes",
+          documentObject.getElementById("excludeOneTimeCodeFields").checked
+        ],
+        [
           "payment",
           documentObject.getElementById("excludePaymentFields").checked
-        ],
-        [
-          "personal",
-          documentObject.getElementById("excludePersonalFields").checked
-        ],
-        [
-          "technical",
-          documentObject.getElementById("excludeTechnicalFields").checked
         ]
       ]
         .filter(([, checked]) => checked)
@@ -210,12 +214,14 @@
       settings.allowedSites.join("\n");
     documentObject.getElementById("blockedSites").value =
       settings.blockedSites.join("\n");
+    documentObject.getElementById("excludePasswordFields").checked =
+      settings.excludedFieldCategories.includes("passwords");
+    documentObject.getElementById("excludeApiSecretFields").checked =
+      settings.excludedFieldCategories.includes("apiSecrets");
+    documentObject.getElementById("excludeOneTimeCodeFields").checked =
+      settings.excludedFieldCategories.includes("oneTimeCodes");
     documentObject.getElementById("excludePaymentFields").checked =
       settings.excludedFieldCategories.includes("payment");
-    documentObject.getElementById("excludePersonalFields").checked =
-      settings.excludedFieldCategories.includes("personal");
-    documentObject.getElementById("excludeTechnicalFields").checked =
-      settings.excludedFieldCategories.includes("technical");
   }
 
   function setStatus(messageKey, isError, documentObject) {

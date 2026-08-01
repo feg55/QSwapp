@@ -116,7 +116,7 @@
     }
   }
 
-  function isSupportedTextControl(element, view) {
+  function isSupportedTextControl(element, view, options = {}) {
     const isTextarea =
       (view.HTMLTextAreaElement && element instanceof view.HTMLTextAreaElement) ||
       String(element?.tagName || "").toLowerCase() === "textarea";
@@ -128,9 +128,15 @@
       return true;
     }
 
+    if (!isInput) {
+      return false;
+    }
+
+    const type = String(element.type || "").toLowerCase();
+
     return (
-      isInput &&
-      ALLOWED_INPUT_TYPES.has(String(element.type || "").toLowerCase())
+      ALLOWED_INPUT_TYPES.has(type) ||
+      (type === "password" && !shouldSkipField(element, options))
     );
   }
 
@@ -152,7 +158,6 @@
     if (
       typeof start !== "number" ||
       start !== end ||
-      String(element.type || "").toLowerCase() === "password" ||
       shouldSkipField(element, options)
     ) {
       return { changed: false, reason: "unsupported-control" };
@@ -327,7 +332,7 @@
       return { changed: false, reason: "protected-field" };
     }
 
-    if (isSupportedTextControl(target, view)) {
+    if (isSupportedTextControl(target, view, options)) {
       return correctTextControl(target, options);
     }
 

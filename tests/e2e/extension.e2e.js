@@ -494,22 +494,22 @@ test("applies local site lists and protected terms without reload", async () => 
     );
 
     await page.evaluate(() => {
-      const personal = document.createElement("input");
-      personal.id = "personal-input";
-      personal.setAttribute("aria-label", "E-mail");
-      document.body.appendChild(personal);
+      const apiKey = document.createElement("input");
+      apiKey.id = "api-key-input";
+      apiKey.setAttribute("aria-label", "API key");
+      document.body.appendChild(apiKey);
     });
-    const personalInput = page.locator("#personal-input");
-    await personalInput.pressSequentially("ghbdtn ");
-    assert.equal(await personalInput.inputValue(), "ghbdtn ");
+    const apiKeyInput = page.locator("#api-key-input");
+    await apiKeyInput.pressSequentially("ghbdtn ");
+    assert.equal(await apiKeyInput.inputValue(), "ghbdtn ");
 
     await extension.serviceWorker.evaluate(async () => {
       await chrome.storage.local.set({ excludedFieldCategories: [] });
     });
-    await personalInput.fill("");
-    await personalInput.pressSequentially("ghbdtn ");
+    await apiKeyInput.fill("");
+    await apiKeyInput.pressSequentially("ghbdtn ");
     await page.waitForFunction(
-      () => document.getElementById("personal-input").value === "привет "
+      () => document.getElementById("api-key-input").value === "привет "
     );
   } finally {
     await extension.close();

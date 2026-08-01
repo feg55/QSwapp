@@ -9,11 +9,11 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function createFieldSafety() {
   "use strict";
 
-  const CREDENTIAL_AUTOCOMPLETE = new Set([
+  const PASSWORD_AUTOCOMPLETE = new Set([
     "current-password",
-    "new-password",
-    "one-time-code"
+    "new-password"
   ]);
+  const ONE_TIME_CODE_AUTOCOMPLETE = new Set(["one-time-code"]);
   const PAYMENT_AUTOCOMPLETE = new Set([
     "cc-name",
     "cc-given-name",
@@ -28,46 +28,20 @@
     "transaction-currency",
     "transaction-amount"
   ]);
-  const PERSONAL_AUTOCOMPLETE = new Set([
-    "name",
-    "honorific-prefix",
-    "given-name",
-    "additional-name",
-    "family-name",
-    "honorific-suffix",
-    "nickname",
-    "email",
-    "tel",
-    "tel-country-code",
-    "tel-national",
-    "tel-area-code",
-    "tel-local",
-    "street-address",
-    "address-line1",
-    "address-line2",
-    "address-line3",
-    "address-level1",
-    "address-level2",
-    "address-level3",
-    "address-level4",
-    "country",
-    "country-name",
-    "postal-code"
-  ]);
-  const CREDENTIAL_PATTERN =
-    /password|passcode|passwd|pwd|pin(?:\s|_|-)?code|\botp\b|one(?:\s|_|-)?time|verification(?:\s|_|-)?code|recovery(?:\s|_|-)?code|backup(?:\s|_|-)?code|secret|security(?:\s|_|-)?code|api(?:\s|_|-)?key|access(?:\s|_|-)?token|парол|пин|одноразов|код(?:\s|_|-)?(?:доступа|подтверждения|восстановления|безопасности)|резервн(?:ый|ого)?(?:\s|_|-)?код|секрет/ui;
+  const PASSWORD_PATTERN = /password|passwd|\bpwd\b|парол/ui;
+  const ONE_TIME_CODE_PATTERN =
+    /passcode|pin(?:\s|_|-)?code|\botp\b|one(?:\s|_|-)?time|verification(?:\s|_|-)?code|recovery(?:\s|_|-)?code|backup(?:\s|_|-)?code|security(?:\s|_|-)?code|пин|одноразов|код(?:\s|_|-)?(?:доступа|подтверждения|восстановления|безопасности)|резервн(?:ый|ого)?(?:\s|_|-)?код/ui;
+  const API_SECRET_PATTERN =
+    /api(?:\s|_|-)?key|access(?:\s|_|-)?token|auth(?:\s|_|-)?token|client(?:\s|_|-)?secret|private(?:\s|_|-)?key|\bsecret\b|секрет/ui;
   const PAYMENT_PATTERN =
     /credit(?:\s|_|-)?card|card(?:\s|_|-)?(?:number|holder)|\bcc(?:\s|_|-)?(?:number|csc|exp)\b|\bcvv\b|\bcvc\b|\biban\b|bank(?:\s|_|-)?account|payment|номер(?:\s|_|-)?карт|банковск|плат[её]ж/ui;
-  const PERSONAL_PATTERN =
-    /full(?:\s|_|-)?name|first(?:\s|_|-)?name|last(?:\s|_|-)?name|given(?:\s|_|-)?name|family(?:\s|_|-)?name|e-?mail|phone|telephone|postal|address|passport|\bssn\b|фио|имя|фамили|почт|телефон|адрес|паспорт/ui;
   const STRICT_TEXT_PATTERN =
     /\b(?:url|uri|website|domain|hostname|host|email|e-mail|code|source|terminal|console)\b|сайт|домен|почт|адрес|код|терминал/ui;
-  const TECHNICAL_PATTERN =
-    /\b(?:url|uri|website|domain|hostname|host|code|source|terminal|console|command|query|script)\b|сайт|домен|код|терминал|команд|скрипт/ui;
   const DEFAULT_AUTOMATIC_EXCLUSIONS = new Set([
+    "passwords",
+    "apiSecrets",
+    "oneTimeCodes",
     "payment",
-    "personal",
-    "technical"
   ]);
 
   function elementForNode(node) {
@@ -200,14 +174,29 @@
       if (
         type === "password" ||
         Array.from(autocomplete).some((token) =>
-          CREDENTIAL_AUTOCOMPLETE.has(token)
+          PASSWORD_AUTOCOMPLETE.has(token)
         ) ||
-        attribute(element, "aria-secret") === "true" ||
-        attribute(element, "data-sensitive") === "true" ||
-        CREDENTIAL_PATTERN.test(description) ||
+        PASSWORD_PATTERN.test(description) ||
         hasMaskedTextStyle(element)
       ) {
-        categories.add("credentials");
+        categories.add("passwords");
+      }
+
+      if (
+        Array.from(autocomplete).some((token) =>
+          ONE_TIME_CODE_AUTOCOMPLETE.has(token)
+        ) ||
+        ONE_TIME_CODE_PATTERN.test(description)
+      ) {
+        categories.add("oneTimeCodes");
+      }
+
+      if (
+        attribute(element, "aria-secret") === "true" ||
+        attribute(element, "data-sensitive") === "true" ||
+        API_SECRET_PATTERN.test(description)
+      ) {
+        categories.add("apiSecrets");
       }
 
       if (
@@ -219,25 +208,6 @@
         categories.add("payment");
       }
 
-      if (
-        ["email", "tel"].includes(type) ||
-        ["email", "tel"].includes(attribute(element, "inputmode")) ||
-        Array.from(autocomplete).some((token) =>
-          PERSONAL_AUTOCOMPLETE.has(token)
-        ) ||
-        PERSONAL_PATTERN.test(description)
-      ) {
-        categories.add("personal");
-      }
-
-      if (
-        type === "url" ||
-        attribute(element, "inputmode") === "url" ||
-        autocomplete.has("url") ||
-        TECHNICAL_PATTERN.test(description)
-      ) {
-        categories.add("technical");
-      }
     }
 
     return Array.from(categories);
@@ -245,17 +215,15 @@
 
   function isSensitiveField(node) {
     const categories = fieldCategories(node);
-    return (
-      categories.includes("credentials") || categories.includes("payment")
+    return categories.some((category) =>
+      ["passwords", "apiSecrets", "oneTimeCodes", "payment"].includes(
+        category
+      )
     );
   }
 
   function shouldSkipAutomaticField(node, excludedCategories) {
     const categories = fieldCategories(node);
-
-    if (categories.includes("credentials")) {
-      return true;
-    }
 
     const exclusions = new Set(
       Array.isArray(excludedCategories)

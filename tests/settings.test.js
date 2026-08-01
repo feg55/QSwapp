@@ -188,9 +188,10 @@ test("returns independent analyzer options for manual and dynamic modes", () => 
     dynamicCorrection: true,
     protectedTerms: [],
     excludedFieldCategories: [
+      "passwords",
+      "apiSecrets",
+      "oneTimeCodes",
       "payment",
-      "personal",
-      "technical"
     ]
   });
 });
@@ -220,9 +221,10 @@ test("normalizes local exclusions and evaluates site lists", async () => {
     allowedSites: ["example.com", "docs.example.org"],
     blockedSites: ["private.example.com"],
     excludedFieldCategories: [
+      "passwords",
+      "apiSecrets",
+      "oneTimeCodes",
       "payment",
-      "personal",
-      "technical"
     ]
   });
   assert.equal(isSiteAllowed("https://www.example.com/page", local), true);
@@ -255,5 +257,19 @@ test("canonicalizes IDN and IPv6 site rules before matching", () => {
       excludedFieldCategories: []
     }),
     true
+  );
+});
+
+test("migrates broad field exclusions to concrete sensitive types", () => {
+  assert.deepEqual(
+    normalizeLocalSettings({
+      excludedFieldCategories: [
+        "credentials",
+        "payment",
+        "personal",
+        "technical"
+      ]
+    }).excludedFieldCategories,
+    ["passwords", "apiSecrets", "oneTimeCodes", "payment"]
   );
 });

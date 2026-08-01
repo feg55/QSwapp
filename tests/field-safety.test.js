@@ -103,20 +103,22 @@ test("reads associated labels and applies configurable automatic exclusions", ()
     }
   };
   const paymentField = createElement({ autocomplete: "cc-number" });
-  const personalField = createElement({ "aria-label": "E-mail" });
-  const technicalField = createElement({ className: "source-code-editor" });
+  const apiField = createElement({ "aria-label": "API key" });
+  const passwordField = createElement({ "aria-label": "Password" });
 
-  assert.deepEqual(
-    fieldCategories(verificationField),
-    ["credentials", "technical"]
-  );
-  assert.equal(shouldSkipAutomaticField(verificationField, []), true);
-  assert.equal(shouldSkipAutomaticField(paymentField, ["payment"]), true);
-  assert.equal(shouldSkipAutomaticField(paymentField, []), false);
-  assert.equal(shouldSkipAutomaticField(personalField, ["personal"]), true);
-  assert.equal(shouldSkipAutomaticField(personalField, []), false);
+  assert.deepEqual(fieldCategories(verificationField), ["oneTimeCodes"]);
   assert.equal(
-    shouldSkipAutomaticField(technicalField, ["technical"]),
+    shouldSkipAutomaticField(verificationField, ["oneTimeCodes"]),
     true
   );
+  assert.equal(shouldSkipAutomaticField(verificationField, []), false);
+  assert.equal(shouldSkipAutomaticField(paymentField, ["payment"]), true);
+  assert.equal(shouldSkipAutomaticField(paymentField, []), false);
+  assert.equal(shouldSkipAutomaticField(apiField, ["apiSecrets"]), true);
+  assert.equal(shouldSkipAutomaticField(apiField, []), false);
+  assert.equal(
+    shouldSkipAutomaticField(passwordField, ["passwords"]),
+    true
+  );
+  assert.equal(shouldSkipAutomaticField(passwordField, []), false);
 });

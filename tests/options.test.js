@@ -91,15 +91,27 @@ function createOptionsDocument() {
     },
     excludePaymentFields: {
       id: "excludePaymentFields",
-      checked: false
+      checked: false,
+      disabled: false,
+      dynamicOption: true
     },
-    excludePersonalFields: {
-      id: "excludePersonalFields",
-      checked: false
+    excludePasswordFields: {
+      id: "excludePasswordFields",
+      checked: false,
+      disabled: false,
+      dynamicOption: true
     },
-    excludeTechnicalFields: {
-      id: "excludeTechnicalFields",
-      checked: false
+    excludeApiSecretFields: {
+      id: "excludeApiSecretFields",
+      checked: false,
+      disabled: false,
+      dynamicOption: true
+    },
+    excludeOneTimeCodeFields: {
+      id: "excludeOneTimeCodeFields",
+      checked: false,
+      disabled: false,
+      dynamicOption: true
     },
     status: {
       textContent: "",
@@ -285,9 +297,10 @@ test("keeps dynamic mode disabled when site permission is denied", async () => {
   documentObject.elements.dynamicConvertLikelyUnknown.checked = false;
   documentObject.elements.dynamicMinimumLength.value = "3";
   documentObject.elements.dynamicAggressiveness.value = "safe";
+  documentObject.elements.excludePasswordFields.checked = true;
+  documentObject.elements.excludeApiSecretFields.checked = true;
+  documentObject.elements.excludeOneTimeCodeFields.checked = true;
   documentObject.elements.excludePaymentFields.checked = true;
-  documentObject.elements.excludePersonalFields.checked = true;
-  documentObject.elements.excludeTechnicalFields.checked = true;
   documentObject.documentElement.dataset.theme = "dark";
   documentObject.documentElement.dataset.themePreference = "dark";
   documentObject.documentElement.dataset.language = "en";
@@ -313,9 +326,10 @@ test("keeps dynamic mode disabled when site permission is denied", async () => {
       allowedSites: [],
       blockedSites: ["bank.example"],
       excludedFieldCategories: [
+        "passwords",
+        "apiSecrets",
+        "oneTimeCodes",
         "payment",
-        "personal",
-        "technical"
       ]
     }
   ]);
@@ -353,9 +367,10 @@ test("enables automatic controls immediately after permission is granted", async
   documentObject.elements.dynamicConvertLikelyUnknown.checked = false;
   documentObject.elements.dynamicMinimumLength.value = "3";
   documentObject.elements.dynamicAggressiveness.value = "safe";
+  documentObject.elements.excludePasswordFields.checked = true;
+  documentObject.elements.excludeApiSecretFields.checked = true;
+  documentObject.elements.excludeOneTimeCodeFields.checked = true;
   documentObject.elements.excludePaymentFields.checked = true;
-  documentObject.elements.excludePersonalFields.checked = true;
-  documentObject.elements.excludeTechnicalFields.checked = true;
   documentObject.elements.dynamicAutocorrectTypos.disabled = true;
   documentObject.elements.dynamicConvertLikelyUnknown.disabled = true;
   documentObject.elements.dynamicMinimumLength.disabled = true;
@@ -373,6 +388,8 @@ test("enables automatic controls immediately after permission is granted", async
   );
   assert.equal(documentObject.elements.dynamicAggressiveness.disabled, false);
   assert.equal(documentObject.elements.dynamicMinimumLength.disabled, false);
+  assert.equal(documentObject.elements.excludePasswordFields.disabled, false);
+  assert.equal(documentObject.elements.excludeApiSecretFields.disabled, false);
 });
 
 test("changes theme and language only after their buttons are used", () => {

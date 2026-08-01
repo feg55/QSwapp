@@ -156,11 +156,12 @@ test("does not inspect partial input, disabled mode or password fields", async (
 
 test("uses local field categories for automatic exclusions", async () => {
   const excluded = createControl("ghbdtn ", 7, "text", {
-    "aria-label": "E-mail"
+    "aria-label": "API key"
   });
   const allowed = createControl("ghbdtn ", 7, "text", {
-    "aria-label": "E-mail"
+    "aria-label": "API key"
   });
+  const allowedPassword = createControl("ghbdtn ", 7, "password");
   const eventFor = (target) => ({
     target,
     inputType: "insertText",
@@ -174,7 +175,7 @@ test("uses local field categories for automatic exclusions", async () => {
       eventFor(excluded.control),
       {
         dynamicCorrection: true,
-        excludedFieldCategories: ["personal"]
+        excludedFieldCategories: ["apiSecrets"]
       },
       excluded.documentObject
     ),
@@ -197,6 +198,22 @@ test("uses local field categories for automatic exclusions", async () => {
     true
   );
   assert.equal(allowed.control.value, "привет ");
+
+  assert.equal(
+    (
+      await processInputEvent(
+        eventFor(allowedPassword.control),
+        {
+          dynamicCorrection: true,
+          convertLikelyUnknown: true,
+          excludedFieldCategories: []
+        },
+        allowedPassword.documentObject
+      )
+    ).changed,
+    true
+  );
+  assert.equal(allowedPassword.control.value, "привет ");
 });
 
 test("corrects a completed token in a simple contenteditable text node", async () => {

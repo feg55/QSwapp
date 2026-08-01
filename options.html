@@ -206,6 +206,84 @@
             max="12"
           >
         </label>
+
+        <div class="subsection-heading">
+          <strong data-i18n="automaticExcludedFieldsTitle">
+            Do not correct automatically in these fields
+          </strong>
+          <small data-i18n="automaticExcludedFieldsDescription">
+            These exclusions are stored only on this device.
+          </small>
+        </div>
+
+        <label class="setting" for="excludePasswordFields">
+          <span>
+            <strong data-i18n="excludePasswordFields">Password fields</strong>
+            <small data-i18n="excludePasswordFieldsDescription">
+              Includes native, masked and custom password inputs. Disabling
+              this protection may change a password while it is being typed.
+            </small>
+          </span>
+          <span class="switch">
+            <input
+              id="excludePasswordFields"
+              data-dynamic-option
+              type="checkbox"
+            >
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <label class="setting" for="excludeApiSecretFields">
+          <span>
+            <strong data-i18n="excludeApiSecretFields">API keys and access tokens</strong>
+            <small data-i18n="excludeApiSecretFieldsDescription">
+              Includes client secrets, private keys and authentication tokens.
+            </small>
+          </span>
+          <span class="switch">
+            <input
+              id="excludeApiSecretFields"
+              data-dynamic-option
+              type="checkbox"
+            >
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <label class="setting" for="excludeOneTimeCodeFields">
+          <span>
+            <strong data-i18n="excludeOneTimeCodeFields">One-time and recovery codes</strong>
+            <small data-i18n="excludeOneTimeCodeFieldsDescription">
+              Includes OTP, verification, backup and security codes.
+            </small>
+          </span>
+          <span class="switch">
+            <input
+              id="excludeOneTimeCodeFields"
+              data-dynamic-option
+              type="checkbox"
+            >
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
+
+        <label class="setting" for="excludePaymentFields">
+          <span>
+            <strong data-i18n="excludePaymentFields">Payment fields</strong>
+            <small data-i18n="excludePaymentFieldsDescription">
+              Includes bank card numbers, CVV/CVC and IBAN.
+            </small>
+          </span>
+          <span class="switch">
+            <input
+              id="excludePaymentFields"
+              data-dynamic-option
+              type="checkbox"
+            >
+            <span aria-hidden="true"></span>
+          </span>
+        </label>
       </section>
 
       <section class="card" aria-labelledby="exceptions-heading">
@@ -213,40 +291,6 @@
           <h2 id="exceptions-heading" data-i18n="exceptionsHeading">Exceptions and sites</h2>
           <span class="badge local" data-i18n="storedOnDevice">Stored on this device</span>
         </div>
-
-        <fieldset class="field-exclusions">
-          <legend data-i18n="excludedFieldsTitle">
-            Fields excluded from automatic correction
-          </legend>
-          <p data-i18n="excludedFieldsDescription">
-            Passwords, one-time codes and secrets are always protected.
-            Choose the additional field categories to skip.
-          </p>
-
-          <label class="field-exclusion" for="excludePaymentFields">
-            <span data-i18n="excludePaymentFields">Payment and banking details</span>
-            <span class="switch">
-              <input id="excludePaymentFields" type="checkbox">
-              <span aria-hidden="true"></span>
-            </span>
-          </label>
-
-          <label class="field-exclusion" for="excludePersonalFields">
-            <span data-i18n="excludePersonalFields">Personal and contact data</span>
-            <span class="switch">
-              <input id="excludePersonalFields" type="checkbox">
-              <span aria-hidden="true"></span>
-            </span>
-          </label>
-
-          <label class="field-exclusion" for="excludeTechnicalFields">
-            <span data-i18n="excludeTechnicalFields">Technical fields and code</span>
-            <span class="switch">
-              <input id="excludeTechnicalFields" type="checkbox">
-              <span aria-hidden="true"></span>
-            </span>
-          </label>
-        </fieldset>
 
         <label class="text-setting" for="protectedTerms">
           <strong data-i18n="protectedTermsTitle">Words and names that must not be changed</strong>
