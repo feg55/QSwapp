@@ -1,11 +1,14 @@
 # Политика конфиденциальности
 
-Последнее обновление: 30 июля 2026 года.
+Последнее обновление: 1 августа 2026 года.
 
 Расширение Qswapp обрабатывает текст только локально в
 браузере. Выделенный и набираемый текст не отправляется разработчику, на
 сторонние серверы или в сервисы аналитики. Расширение не содержит рекламы,
 трекеров и сетевых API для обработки текста.
+
+Текст обрабатывается только в памяти для исправления раскладки и не
+сохраняется как история исправлений.
 
 ## Какие данные сохраняются
 
@@ -22,7 +25,8 @@
 - список запрещённых сайтов;
 - выбранные категории полей, в которых автоматическое исправление отключено.
 
-Содержимое редактируемых полей, история исправлений и пароли не сохраняются.
+Содержимое редактируемых полей, история исправлений, пароли, ключи доступа,
+одноразовые коды и платёжные данные не сохраняются.
 Удаление расширения удаляет его локальное хранилище средствами браузера.
 
 ## Разрешения
@@ -34,7 +38,11 @@
 - необязательный доступ к HTTP/HTTPS-сайтам запрашивается только при включении
   динамического режима и отзывается при его выключении.
 
-Парольные и другие обнаруженные чувствительные поля исключаются из обработки.
+Ручное исправление всегда блокируется в обнаруженных чувствительных полях.
+Автоматическое исправление по умолчанию отключено для паролей, API-ключей,
+одноразовых кодов и платёжных полей. Пользователь может отдельно изменить эти
+локальные исключения в настройках. Даже при отключении исключения содержимое
+поля обрабатывается только локально в памяти и не сохраняется и не передаётся.
 На внутренних страницах браузера и страницах магазинов расширений выполнение
 скриптов запрещено правилами безопасности браузера.
 
@@ -43,6 +51,17 @@
 Расширение не продаёт, не передаёт и не раскрывает пользовательские данные
 третьим лицам. Поскольку текст не покидает устройство, у разработчика нет
 доступа к нему.
+
+## Ограниченное использование
+
+Доступ к содержимому редактируемых полей и веб-страниц используется только для
+основной пользовательской функции Qswapp — исправления текста, набранного в
+неверной русской или английской раскладке. Данные не используются для рекламы,
+оценки платёжеспособности или иных несвязанных целей и недоступны людям.
+
+Использование информации, получаемой через API Chrome, соответствует Политике
+пользовательских данных Chrome Web Store, включая требования ограниченного
+использования.
 
 ## Контакты
 
@@ -53,11 +72,19 @@
 
 ## Privacy Policy (English summary)
 
-Qswapp processes selected and typed text locally in the browser. It
-does not transmit text, passwords, correction history, or analytics.
+Qswapp processes selected and typed text locally in browser memory. It
+does not transmit or retain text, passwords, access keys, one-time codes,
+payment data, correction history, or analytics.
 `storage.sync` contains only correction-mode, theme, and language preferences.
 User-protected terms, site allow/block lists, and automatic field exclusions
 are kept in `storage.local`.
 Optional HTTP/HTTPS host access is requested only for dynamic correction and
-is removed when that mode is disabled. Privacy questions can be submitted via
-the project issue tracker linked above.
+is removed when that mode is disabled. Manual correction is always blocked in
+detected sensitive fields. Automatic correction excludes sensitive field
+categories by default; users may change these local exclusions.
+
+Data accessed through Chrome APIs is used only to provide Qswapp's single
+purpose, is not sold or transferred, is not used for advertising or
+creditworthiness, and is not made available to humans. This use complies with
+the Chrome Web Store User Data Policy, including the Limited Use requirements.
+Privacy questions can be submitted via the project issue tracker linked above.
