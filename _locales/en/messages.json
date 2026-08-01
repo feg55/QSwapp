@@ -1,0 +1,11 @@
+{
+  "extensionName": {
+    "message": "Qswapp"
+  },
+  "extensionDescription": {
+    "message": "Corrects text typed with the wrong English or Russian keyboard layout, manually or while typing."
+  },
+  "fixSelectionCommand": {
+    "message": "Fix the keyboard layout of selected text"
+  }
+}

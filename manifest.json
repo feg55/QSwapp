@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
   "minimum_chrome_version": "119",
-  "name": "Qswapp",
+  "name": "__MSG_extensionName__",
+  "default_locale": "en",
   "version": "3.2.0",
-  "description": "Corrects text typed with the wrong keyboard layout, manually or while typing.",
+  "description": "__MSG_extensionDescription__",
   "permissions": [
     "contextMenus",
     "scripting",
@@ -23,7 +24,7 @@
         "default": "Ctrl+Shift+L",
         "mac": "Command+Shift+L"
       },
-      "description": "Fix the keyboard layout of selected text"
+      "description": "__MSG_fixSelectionCommand__"
     }
   },
   "options_ui": {
@@ -31,7 +32,7 @@
     "open_in_tab": true
   },
   "action": {
-    "default_title": "Qswapp",
+    "default_title": "__MSG_extensionName__",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",

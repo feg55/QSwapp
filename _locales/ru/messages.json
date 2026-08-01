@@ -1,0 +1,11 @@
+{
+  "extensionName": {
+    "message": "Qswapp"
+  },
+  "extensionDescription": {
+    "message": "Исправляет текст, набранный в неверной русской или английской раскладке, вручную или при вводе."
+  },
+  "fixSelectionCommand": {
+    "message": "Исправить раскладку выделенного текста"
+  }
+}
