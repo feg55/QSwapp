@@ -66,8 +66,20 @@
         <span class="action-icon" aria-hidden="true">↻</span>
         <span>
           <strong data-i18n="fixSelectedText">Fix selected text</strong>
-          <small>Ctrl+Shift+L · ⌘Shift+L</small>
+          <small id="shortcutHint">Ctrl+Shift+L · ⌘Shift+L</small>
         </span>
+      </button>
+
+      <button
+        id="configureShortcut"
+        class="shortcut-warning"
+        type="button"
+        hidden
+      >
+        <span data-i18n="shortcutNotAssigned">
+          Keyboard shortcut is not assigned
+        </span>
+        <strong data-i18n="configureShortcut">Configure</strong>
       </button>
 
       <section

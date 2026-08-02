@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Accidental nested checkout of this repository
+/QSwapp/
+
 # Test and coverage output
 test-results/
 playwright-report/

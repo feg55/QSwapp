@@ -87,6 +87,52 @@
     languageButton.setAttribute("aria-label", languageButton.title);
   }
 
+  function shortcutSettingsUrl(documentObject) {
+    const userAgent =
+      documentObject?.defaultView?.navigator?.userAgent || "";
+
+    return /\bEdg(?:A|iOS)?\//u.test(userAgent)
+      ? "edge://extensions/shortcuts"
+      : "chrome://extensions/shortcuts";
+  }
+
+  async function activeShortcut(chromeObject) {
+    const commands = await chromeObject?.commands?.getAll?.();
+    const command = Array.isArray(commands)
+      ? commands.find((item) => item?.name === "fix-selection-v2")
+      : null;
+
+    return String(command?.shortcut || "");
+  }
+
+  async function updateShortcutDisplay(documentObject, chromeObject) {
+    const shortcut = await activeShortcut(chromeObject);
+    const hint = documentObject.getElementById("shortcutHint");
+    const configureButton =
+      documentObject.getElementById("configureShortcut");
+
+    if (shortcut) {
+      hint.removeAttribute?.("data-i18n");
+      hint.textContent = shortcut;
+      configureButton.hidden = true;
+    } else {
+      if (hint.dataset) {
+        hint.dataset.i18n = "shortcutNotAssigned";
+      }
+      hint.textContent = text("shortcutNotAssigned", documentObject);
+      configureButton.hidden = false;
+    }
+
+    return shortcut;
+  }
+
+  async function openShortcutSettings(documentObject, chromeObject) {
+    await chromeObject?.tabs?.create?.({
+      url: shortcutSettingsUrl(documentObject)
+    });
+    return true;
+  }
+
   function applyAppearance(settings, documentObject, chromeObject) {
     themeApi.applyTheme(settings.appearance.theme, documentObject);
     i18nApi.applyLanguage(
@@ -313,6 +359,7 @@
     }
 
     await restorePopup(documentObject, chromeObject);
+    await updateShortcutDisplay(documentObject, chromeObject);
     let saveQueue = Promise.resolve();
 
     for (const id of [
@@ -370,6 +417,11 @@
       .addEventListener("click", () => {
         void chromeObject.runtime.openOptionsPage();
       });
+    documentObject
+      .getElementById("configureShortcut")
+      .addEventListener("click", () => {
+        void openShortcutSettings(documentObject, chromeObject);
+      });
 
     return true;
   }
@@ -381,10 +433,13 @@
     fixCurrentSelection,
     initializePopup,
     mergePopupSettings,
+    openShortcutSettings,
     restorePopup,
     savePopupChange,
     setDynamicPermission,
+    shortcutSettingsUrl,
     toggleAppearance,
+    updateShortcutDisplay,
     updatePreferenceButtons
   };
 });

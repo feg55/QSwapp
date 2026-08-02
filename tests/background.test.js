@@ -280,7 +280,7 @@ test("injects dynamic correction into already open tabs when enabled", async () 
 test("runs the hotkey in the frame that owns the selection", async () => {
   const loaded = loadBackground();
 
-  await loaded.listeners.command("fix-selection", { id: 42 });
+  await loaded.listeners.command("fix-selection-v2", { id: 42 });
 
   assert.equal(loaded.injections.length, 2);
   assert.equal(typeof loaded.injections[0].func, "function");

@@ -147,8 +147,33 @@ test("opens compact settings with square theme and language buttons", async () =
     const manifest = await extension.serviceWorker.evaluate(
       () => chrome.runtime.getManifest()
     );
+    const assignedShortcut = await extension.serviceWorker.evaluate(
+      async () =>
+        (await chrome.commands.getAll()).find(
+          (command) => command.name === "fix-selection-v2"
+        )?.shortcut || ""
+    );
 
     assert.equal(manifest.action.default_popup, "popup.html");
+    if (assignedShortcut) {
+      assert.equal(
+        await page.locator("#shortcutHint").textContent(),
+        assignedShortcut
+      );
+      assert.equal(
+        await page.locator("#configureShortcut").isHidden(),
+        true
+      );
+    } else {
+      assert.equal(
+        await page.locator("#shortcutHint").textContent(),
+        "Keyboard shortcut is not assigned"
+      );
+      assert.equal(
+        await page.locator("#configureShortcut").isVisible(),
+        true
+      );
+    }
     assert.equal(
       await page.locator("h1").textContent(),
       "Qswapp"

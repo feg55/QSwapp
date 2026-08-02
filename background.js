@@ -287,7 +287,7 @@ chrome.runtime.onMessage?.addListener((message, sender, sendResponse) => {
 });
 
 chrome.commands?.onCommand.addListener(async (command, tab) => {
-  if (command !== "fix-selection") {
+  if (command !== "fix-selection-v2") {
     return;
   }
 

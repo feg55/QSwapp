@@ -3,9 +3,11 @@ const assert = require("node:assert/strict");
 
 const {
   fixCurrentSelection,
+  openShortcutSettings,
   restorePopup,
   savePopupChange,
-  toggleAppearance
+  toggleAppearance,
+  updateShortcutDisplay
 } = require("../popup");
 
 function createPopupDocument() {
@@ -58,6 +60,18 @@ function createPopupDocument() {
         }
       }
     },
+    shortcutHint: {
+      dataset: {},
+      textContent: "",
+      removeAttribute(name) {
+        if (name === "data-i18n") {
+          delete this.dataset.i18n;
+        }
+      }
+    },
+    configureShortcut: {
+      hidden: true
+    },
     version: { textContent: "" },
     fixSelection: { disabled: false }
   };
@@ -89,7 +103,8 @@ function createPopupDocument() {
 
 function createPopupChrome({
   permissionGranted = false,
-  requestGranted = false
+  requestGranted = false,
+  shortcut = "Ctrl+Shift+L"
 } = {}) {
   const storageState = {
     manual: {
@@ -140,12 +155,26 @@ function createPopupChrome({
     tabs: {
       async query() {
         return [{ id: 51 }];
+      },
+      async create(details) {
+        calls.push(["create", details]);
+        return { id: 52, ...details };
+      }
+    },
+    commands: {
+      async getAll() {
+        return [
+          {
+            name: "fix-selection-v2",
+            shortcut
+          }
+        ];
       }
     },
     runtime: {
       lastError: null,
       getManifest() {
-        return { version: "3.2.0" };
+        return { version: "3.2.1" };
       },
       sendMessage(message, callback) {
         calls.push(["message", message]);
@@ -181,7 +210,60 @@ test("restores compact settings with saved appearance", async () => {
   assert.equal(documentObject.elements.popupLanguageToggle.textContent, "EN");
   assert.equal(documentObject.elements.popupAutocorrectTypos.checked, true);
   assert.equal(documentObject.elements.popupConvertUnknown.checked, true);
-  assert.equal(documentObject.elements.version.textContent, "v3.2.0");
+  assert.equal(documentObject.elements.version.textContent, "v3.2.1");
+});
+
+test("shows the active browser shortcut instead of a hard-coded value", async () => {
+  const documentObject = createPopupDocument();
+  const fixture = createPopupChrome({ shortcut: "Ctrl+Shift+L" });
+
+  assert.equal(
+    await updateShortcutDisplay(documentObject, fixture.chromeObject),
+    "Ctrl+Shift+L"
+  );
+  assert.equal(
+    documentObject.elements.shortcutHint.textContent,
+    "Ctrl+Shift+L"
+  );
+  assert.equal(documentObject.elements.configureShortcut.hidden, true);
+});
+
+test("offers browser shortcut settings when the command is unassigned", async () => {
+  const documentObject = createPopupDocument();
+  const fixture = createPopupChrome({ shortcut: "" });
+
+  assert.equal(
+    await updateShortcutDisplay(documentObject, fixture.chromeObject),
+    ""
+  );
+  assert.equal(
+    documentObject.elements.shortcutHint.textContent,
+    "Keyboard shortcut is not assigned"
+  );
+  assert.equal(documentObject.elements.configureShortcut.hidden, false);
+
+  await openShortcutSettings(documentObject, fixture.chromeObject);
+  assert.deepEqual(fixture.calls.at(-1), [
+    "create",
+    { url: "chrome://extensions/shortcuts" }
+  ]);
+});
+
+test("opens the Edge shortcut page when running in Edge", async () => {
+  const documentObject = createPopupDocument();
+  documentObject.defaultView = {
+    navigator: {
+      userAgent:
+        "Mozilla/5.0 Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0"
+    }
+  };
+  const fixture = createPopupChrome();
+
+  await openShortcutSettings(documentObject, fixture.chromeObject);
+  assert.deepEqual(fixture.calls.at(-1), [
+    "create",
+    { url: "edge://extensions/shortcuts" }
+  ]);
 });
 
 test("saves quick settings without resetting advanced values", async () => {
