@@ -1,6 +1,6 @@
 {
   "name": "qswapp",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "private": true,
   "description": "Offline correction for text typed with the wrong English or Russian keyboard layout",
   "scripts": {

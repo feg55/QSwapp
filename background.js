@@ -231,6 +231,32 @@ function scheduleDynamicContentScriptSync() {
   return dynamicSyncPromise;
 }
 
+function changesDynamicOrigins(permissions) {
+  return Boolean(
+    permissions.origins?.some((origin) =>
+      DYNAMIC_ORIGINS.includes(origin)
+    )
+  );
+}
+
+async function setStoredDynamicEnabled(enabled) {
+  const settings = SETTINGS_API?.loadSettings
+    ? await SETTINGS_API.loadSettings(chrome.storage.sync)
+    : await chrome.storage.sync.get(DEFAULT_SETTINGS);
+
+  if (Boolean(settings.dynamic?.enabled) === enabled) {
+    return false;
+  }
+
+  await chrome.storage.sync.set({
+    dynamic: {
+      ...settings.dynamic,
+      enabled
+    }
+  });
+  return true;
+}
+
 async function initializeExtension() {
   createMenu();
   await scheduleDynamicContentScriptSync();
@@ -317,22 +343,17 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 });
 
-chrome.permissions.onRemoved.addListener(async (permissions) => {
-  if (
-    permissions.origins?.some((origin) => DYNAMIC_ORIGINS.includes(origin))
-  ) {
-    const settings = SETTINGS_API?.loadSettings
-      ? await SETTINGS_API.loadSettings(chrome.storage.sync)
-      : await chrome.storage.sync.get(DEFAULT_SETTINGS);
+chrome.permissions.onAdded.addListener(async (permissions) => {
+  if (changesDynamicOrigins(permissions)) {
+    await setStoredDynamicEnabled(true);
+    await scheduleDynamicContentScriptSync();
+  }
+});
 
-    if (settings.dynamic?.enabled) {
-      await chrome.storage.sync.set({
-        dynamic: {
-          ...settings.dynamic,
-          enabled: false
-        }
-      });
-    }
+chrome.permissions.onRemoved.addListener(async (permissions) => {
+  if (changesDynamicOrigins(permissions)) {
+    await setStoredDynamicEnabled(false);
+    await scheduleDynamicContentScriptSync();
   }
 });
 

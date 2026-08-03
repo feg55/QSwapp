@@ -3,7 +3,7 @@
   "minimum_chrome_version": "119",
   "name": "__MSG_extensionName__",
   "default_locale": "en",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "__MSG_extensionDescription__",
   "permissions": [
     "contextMenus",

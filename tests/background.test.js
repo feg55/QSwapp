@@ -9,6 +9,7 @@ function loadBackground({
   permissionGranted = false,
   openTabIds = []
 } = {}) {
+  let currentPermissionGranted = permissionGranted;
   const listeners = {};
   const createdMenus = [];
   const injections = [];
@@ -79,7 +80,12 @@ function loadBackground({
     },
     permissions: {
       async contains() {
-        return permissionGranted;
+        return currentPermissionGranted;
+      },
+      onAdded: {
+        addListener(listener) {
+          listeners.permissionsAdded = listener;
+        }
       },
       onRemoved: {
         addListener(listener) {
@@ -160,7 +166,10 @@ function loadBackground({
     registrationCalls,
     unregisterCalls,
     updateCalls,
-    storageState
+    storageState,
+    setPermissionGranted(value) {
+      currentPermissionGranted = Boolean(value);
+    }
   };
 }
 
@@ -275,6 +284,46 @@ test("injects dynamic correction into already open tabs when enabled", async () 
     JSON.parse(JSON.stringify(fileInjections[0].target)),
     { tabId: 11, allFrames: true }
   );
+});
+
+test("finishes enabling dynamic correction after the popup permission prompt closes", async () => {
+  const loaded = loadBackground({
+    dynamicCorrection: false,
+    permissionGranted: false,
+    openTabIds: [11]
+  });
+
+  loaded.setPermissionGranted(true);
+  await loaded.listeners.permissionsAdded({
+    origins: ["http://*/*", "https://*/*"]
+  });
+
+  assert.equal(loaded.storageState.dynamic.enabled, true);
+  assert.equal(loaded.registeredContentScripts.length, 1);
+  assert.equal(
+    loaded.injections.some(
+      (injection) =>
+        injection.target?.tabId === 11 &&
+        injection.files?.includes("dynamic-correction.js")
+    ),
+    true
+  );
+});
+
+test("turns dynamic correction off when site permission is removed", async () => {
+  const loaded = loadBackground({
+    dynamicCorrection: true,
+    permissionGranted: true
+  });
+
+  await loaded.listeners.onInstalled();
+  loaded.setPermissionGranted(false);
+  await loaded.listeners.permissionsRemoved({
+    origins: ["http://*/*", "https://*/*"]
+  });
+
+  assert.equal(loaded.storageState.dynamic.enabled, false);
+  assert.equal(loaded.registeredContentScripts.length, 0);
 });
 
 test("runs the hotkey in the frame that owns the selection", async () => {

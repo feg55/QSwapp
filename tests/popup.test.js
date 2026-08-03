@@ -174,7 +174,7 @@ function createPopupChrome({
     runtime: {
       lastError: null,
       getManifest() {
-        return { version: "3.2.1" };
+        return { version: "3.2.2" };
       },
       sendMessage(message, callback) {
         calls.push(["message", message]);
@@ -210,7 +210,7 @@ test("restores compact settings with saved appearance", async () => {
   assert.equal(documentObject.elements.popupLanguageToggle.textContent, "EN");
   assert.equal(documentObject.elements.popupAutocorrectTypos.checked, true);
   assert.equal(documentObject.elements.popupConvertUnknown.checked, true);
-  assert.equal(documentObject.elements.version.textContent, "v3.2.1");
+  assert.equal(documentObject.elements.version.textContent, "v3.2.2");
 });
 
 test("shows the active browser shortcut instead of a hard-coded value", async () => {
