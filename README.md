@@ -10,7 +10,7 @@ ghbdtn → привет
 
 **[Install Qswapp from the Chrome Web Store](https://chromewebstore.google.com/detail/qswapp/nemomlcejjfckiknobijmfgncaailpek)**
 
-![Qswapp settings](store-assets/screenshots/global/qswapp-settings-global-1280x800.png)
+![Qswapp settings](store-assets/screenshots/global/QswappLanding.png)
 
 Everything runs locally in your browser. Qswapp has no backend, advertising,
 analytics, or trackers and does not send typed or selected text anywhere.
