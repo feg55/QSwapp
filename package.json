@@ -6,6 +6,7 @@
   "scripts": {
     "dictionary:generate": "node scripts/generate-dictionaries.js",
     "dictionary:check": "node scripts/generate-dictionaries.js --check",
+    "release:local": "node scripts/create-release.js",
     "test": "node --test tests/*.test.js",
     "test:e2e": "node --test tests/e2e/*.e2e.js",
     "test:all": "npm test && npm run test:e2e"
